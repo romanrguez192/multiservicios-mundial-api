@@ -1,0 +1,32 @@
+{
+  "name": "multiservicios-mundial-api",
+  "version": "1.0.0",
+  "description": "multiservicios-mundial-api",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/romanrguez192/multiservicios-mundial-api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/romanrguez192/multiservicios-mundial-api/issues"
+  },
+  "homepage": "https://github.com/romanrguez192/multiservicios-mundial-api#readme",
+  "devDependencies": {
+    "dotenv": "^10.0.0",
+    "nodemon": "^2.0.7"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "pg": "^8.6.0"
+  }
+}
