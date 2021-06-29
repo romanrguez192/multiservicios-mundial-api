@@ -1,16 +1,20 @@
-require('dotenv').config();
+require("dotenv").config();
 
-const app = require('./app');
-const db = require('./db')
+const app = require("./app");
+const db = require("./db");
 
-const main = async() => {
-  await app.listen(app.get('port'));
-  console.log(`Server listening on port ${app.get('port')}`);
-  db.connect().then(client => {
-    console.log('connected');
+const main = async () => {
+  app.listen(app.get("port"), () =>
+    console.log(`Server listening on port ${app.get("port")}`)
+  );
+
+  try {
+    const client = await db.connect();
+    console.log("Conectado a la base de datos");
     client.release();
-  })
-  .catch(err => console.error('error connecting', err.stack))
-}
+  } catch (error) {
+    console.error("Error al conectar: ", err.stack);
+  }
+};
 
 main();
