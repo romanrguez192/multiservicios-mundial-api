@@ -74,6 +74,8 @@ CREATE TABLE "Clientes"(
 	"cedCliente" "domCedulas" NOT NULL,
 	"nombre" VARCHAR(60) NOT NULL,
 	"email" VARCHAR(40) UNIQUE NOT NULL,
+	"tlfPrincipal" "domTelefonos" NOT NULL,
+	"tlfAlternativo" "domTelefonos" NOT NULL,
 	PRIMARY KEY("cedCliente")
 );
 
@@ -107,13 +109,6 @@ CREATE TABLE "Mantenimientos"(
 	"fechaMant" DATE NOT NULL,
 	"descripcion" VARCHAR(100) NOT NULL,
 	PRIMARY KEY("codVehiculo", "fechaMant")
-);
-
---@block
-CREATE TABLE "Telefonos"(
-	"cedCliente" "domCedulas" NOT NULL,
-	"nroTelefono" "domTelefonos" NOT NULL,
-	PRIMARY KEY("cedCliente", "nroTelefono")
 );
 
 --@block
@@ -450,12 +445,6 @@ ON UPDATE CASCADE ON DELETE RESTRICT;
 ALTER TABLE "Mantenimientos"
 ADD FOREIGN KEY("codVehiculo")
 REFERENCES "Encargados"
-ON UPDATE CASCADE ON DELETE CASCADE;
-
---@block
-ALTER TABLE "Telefonos"
-ADD FOREIGN KEY("cedCliente")
-REFERENCES "Clientes"
 ON UPDATE CASCADE ON DELETE CASCADE;
 
 --@block
