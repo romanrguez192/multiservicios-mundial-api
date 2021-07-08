@@ -2,7 +2,6 @@
 CREATE DOMAIN "domDirecciones" AS VARCHAR(150);
 CREATE DOMAIN "domTelefonos" AS VARCHAR(18);
 CREATE DOMAIN "domRIF" AS VARCHAR(12);
-CREATE DOMAIN "domCodigos" AS INT; -- FALTA AKIIIIIIIII
 CREATE DOMAIN "domCedulas" AS INT;
 CREATE DOMAIN "domMontos" AS DECIMAL(14, 2) CHECK(VALUE > 0);
 CREATE DOMAIN "domModelos" AS VARCHAR(20);
@@ -43,7 +42,7 @@ CREATE TABLE "Sucursales"(
 	"nombre" VARCHAR(40) NOT NULL,
 	"direccion" "domDirecciones" NOT NULL,
 	"ciudad" VARCHAR(20) NOT NULL,
-	"cedEncargado" domCedulas NOT NULL,
+	"cedEncargado" "domCedulas" NOT NULL,
 	"fechaInvFisico" DATE,
 	PRIMARY KEY("rifSucursal")
 );
@@ -51,10 +50,10 @@ CREATE TABLE "Sucursales"(
 
 --@block
 CREATE TABLE "Vehiculos"(
-	"codVehiculo" "domCodigos" NOT NULL,
+	"codVehiculo" INT GENERATED ALWAYS AS IDENTITY NOT NULL,
 	"placa" VARCHAR(10) UNIQUE NOT NULL,
 	"fechaAdiquisicion" DATE NOT NULL,
-	"fechaRegistro" DATETIME NOT NULL,
+	"fechaRegistro" TIMESTAMP NOT NULL,
 	"cedCliente" "domCedulas" NOT NULL,
 	"marca" "domModelos" NOT NULL,
 	"modelo" "domModelos" NOT NULL,
@@ -64,7 +63,7 @@ CREATE TABLE "Vehiculos"(
 
 --@block
 CREATE TABLE "TiposVehiculos"(
-	"codTipoVehiculo" "domCodigos" NOT NULL,
+	"codTipoVehiculo" INT GENERATED ALWAYS AS IDENTITY NOT NULL,
 	"descripcion" VARCHAR(100) NOT NULL,
 	PRIMARY KEY("codTipoVehiculo")
 );
@@ -91,7 +90,7 @@ CREATE TABLE "Modelos"(
 	"tipoAceiteMotor" VARCHAR(20) NOT NULL,
 	"tipoAceiteCaja" VARCHAR(20) NOT NULL,
 	"tipoRefrigerante" VARCHAR(20) NOT NULL,
-	"codTipoVehiculo" "domCodigos" NOT NULL,
+	"codTipoVehiculo" INT NOT NULL,
 	PRIMARY KEY("marca", "modelo")
 );
 
@@ -105,7 +104,7 @@ CREATE TABLE "Mecanicos"(
 
 --@block
 CREATE TABLE "Mantenimientos"(
-	"codVehiculo" "domCodigos" NOT NULL,
+	"codVehiculo" INT NOT NULL,
 	"fechaMant" DATE NOT NULL,
 	"descripcion" VARCHAR(100) NOT NULL,
 	PRIMARY KEY("codVehiculo", "fechaMant")
@@ -114,13 +113,13 @@ CREATE TABLE "Mantenimientos"(
 --@block
 CREATE TABLE "Admite"(
 	"rifSucursal" "domRIF" NOT NULL,
-	"codTipoVehiculo" "domCodigos" NOT NULL,
+	"codTipoVehiculo" INT NOT NULL,
 	PRIMARY KEY("rifSucursal", "codTipoVehiculo")
 );
 
 --@block
 CREATE TABLE "Servicios"(
-	"codServicio" "domCodigos" NOT NULL,
+	"codServicio" INT GENERATED ALWAYS AS IDENTITY NOT NULL,
 	"nombre" VARCHAR(30) NOT NULL,
 	"descripcion" VARCHAR(100) NOT NULL,
 	"requiereReserva" BOOL NOT NULL,
@@ -133,27 +132,27 @@ CREATE TABLE "Servicios"(
 --@block
 CREATE TABLE "Ofrece"(
 	"rifSucursal" "domRIF" NOT NULL,
-	"codServicio" "domCodigos" NOT NULL,
+	"codServicio" INT NOT NULL,
 	PRIMARY KEY("rifSucursal", "codServicio")
 );
 
 --@block
 CREATE TABLE "Asignado"(
 	"cedEmpleado" "domCedulas" NOT NULL,
-	"codServicio" "domCodigos" NOT NULL,
+	"codServicio" INT NOT NULL,
 	PRIMARY KEY("cedEmpleado", "codServicio")
 );
 
 --@block
 CREATE TABLE "Coordina"(
 	"cedEmpleado" "domCedulas" NOT NULL,
-	"codServicio" "domCodigos" NOT NULL,
+	"codServicio" INT NOT NULL,
 	PRIMARY KEY("cedEmpleado", "codServicio")
 );
 
 --@block
 CREATE TABLE "Actividades"(
-	"codServicio" "domCodigos" NOT NULL,
+	"codServicio" INT NOT NULL,
 	"nroActividad" INT NOT NULL,
 	"precio" "domMontos" NOT NULL,
 	"descripcion" VARCHAR(100) NOT NULL,
@@ -163,10 +162,10 @@ CREATE TABLE "Actividades"(
 
 --@block
 CREATE TABLE "Reservaciones"(
-	"nroReserva" "domCodigos" NOT NULL,
-	"fechaReserva" DATETIME NOT NULL,
-	"codServicio" "domCodigos" NOT NULL,
-	"fechaActividad" DATETIME NOT NULL,
+	"nroReserva" INT GENERATED ALWAYS AS IDENTITY NOT NULL,
+	"fechaReserva" TIMESTAMP NOT NULL,
+	"codServicio" INT NOT NULL,
+	"fechaActividad" TIMESTAMP NOT NULL,
 	"montoAbonado" "domMontos" NOT NULL,
 	"rifSucursal" "domRIF" NOT NULL,
 	"cedCliente" "domCedulas" NOT NULL,
@@ -175,8 +174,8 @@ CREATE TABLE "Reservaciones"(
 
 --@block
 CREATE TABLE "Facturas"(
-	"nroFactura" "domCodigos" NOT NULL,
-	"fechaFacturacion" DATETIME NOT NULL,
+	"nroFactura" INT GENERATED ALWAYS AS IDENTITY NOT NULL,
+	"fechaFacturacion" TIMESTAMP NOT NULL,
 	"montoTotal" "domMontos" NOT NULL,
 	"tipoFactura" VARCHAR(12) NOT NULL
 	CHECK("tipoFactura" IN ('cliente', 'proveedor')),
@@ -186,14 +185,14 @@ CREATE TABLE "Facturas"(
 
 --@block
 CREATE TABLE "FacturasServicios"(
-	"nroFactura" "domCodigos" NOT NULL,
-	"nroSolicitud" "domCodigos" NOT NULL,
+	"nroFactura" INT NOT NULL,
+	"nroSolicitud" INT NOT NULL,
 	PRIMARY KEY("nroFactura");
 );
 
 --@block
 CREATE TABLE "FacturasClientes"(
-	"nroFactura" "domCodigos" NOT NULL,
+	"nroFactura" INT NOT NULL,
 	"descuento" "domPorcentajes"
 	CHECK("descuento" >= 5 AND "descuento" <= 15),
 	"tipoCompra" VARCHAR(13) NOT NULL
@@ -204,30 +203,30 @@ CREATE TABLE "FacturasClientes"(
 
 --@block
 CREATE TABLE "FacturasAccesorios"(
-	"nroFactura" "domCodigos" NOT NULL,
-	"nroPago" "domCodigos" NOT NULL,
+	"nroFactura" INT NOT NULL,
+	"nroPago" INT NOT NULL,
 	PRIMARY KEY("nroFactura")
 );
 
 --@block
 CREATE TABLE "FacturasProveedores"(
-	"nroFactura" "domCodigos" NOT NULL,
-	"fechaPago" DATETIME NOT NULL,
+	"nroFactura" INT NOT NULL,
+	"fechaPago" TIMESTAMP NOT NULL,
 	"rifProveedor" "domRIF" NOT NULL,
 	PRIMARY KEY("nroFactura")
 );
 
 --@block
 CREATE TABLE "Pagos"(
-	"nroPago" "domCodigos" NOT NULL,
+	"nroPago" INT GENERATED ALWAYS AS IDENTITY NOT NULL,
 	"monto" "domMontos" NOT NULL,
-	"fechaPago" DATETIME NOT NULL,
+	"fechaPago" TIMESTAMP NOT NULL,
 	"modalidad" VARCHAR(13) NOT NULL
 	CHECK("modalidad" IN ('efectivo', 'tarjeta', 'transferencia')),
 	"tipoPago" VARCHAR(10) NOT NULL
 	CHECK("tipoPago" IN ('reserva', 'servicio', 'accesorio')),
-	"nroReserva" "domCodigos",
-	"nroFacturaServ" "domCodigos",
+	"nroReserva" INT,
+	"nroFacturaServ" INT,
 	"moneda" VARCHAR(7) NOT NULL
 	CHECK("moneda" IN ('bolívar', 'divisa')),
 	"tipoTarjeta" VARCHAR (7)
@@ -238,10 +237,10 @@ CREATE TABLE "Pagos"(
 
 --@block
 CREATE TABLE "Productos"(
-	"codProducto" "domCodigos" NOT NULL,
+	"codProducto" INT GENERATED ALWAYS AS IDENTITY NOT NULL,
 	"nombre" VARCHAR(30) NOT NULL,
 	"descripcion" VARCHAR(80) NOT NULL,
-	"codLinea" "domCodigos" NOT NULL,
+	"codLinea" INT NOT NULL,
 	"fabricante" VARCHAR(20) NOT NULL,
 	"esEcologico" BOOL NOT NULL,
 	"precio" "domMontos" NOT NULL,
@@ -254,33 +253,33 @@ CREATE TABLE "Productos"(
 
 --@block
 CREATE TABLE "ProductosServicios"(
-	"codProducto" "domCodigos" NOT NULL,
+	"codProducto" INT NOT NULL,
 	PRIMARY KEY("codProducto")
 );
 
 --@block
 CREATE TABLE "Lineas"(
-	"codLinea" "domCodigos" NOT NULL,
+	"codLinea" INT GENERATED ALWAYS AS IDENTITY NOT NULL,
 	"descripcion" VARCHAR(80) NOT NULL,
 	PRIMARY KEY("codLinea")
 );
 
 --@block
 CREATE TABLE "Accesorios"(
-	"codProducto" "domCodigos" NOT NULL,
+	"codProducto" INT NOT NULL,
 	PRIMARY KEY("codProducto")
 );
 
 --@block
 CREATE TABLE "SolicitudesServicio"(
-	"nroSolicitud" "domCodigos" NOT NULL,
-	"fechaEntrada" DATETIME NOT NULL,
-	"fechaSalidaEstimada" DATETIME NOT NULL,
-	"fechaSalidaReal" DATETIME,
-	"codVehiculo" "domCodigos" NOT NULL,
+	"nroSolicitud" INT GENERATED ALWAYS AS IDENTITY NOT NULL,
+	"fechaEntrada" TIMESTAMP NOT NULL,
+	"fechaSalidaEstimada" TIMESTAMP NOT NULL,
+	"fechaSalidaReal" TIMESTAMP,
+	"codVehiculo" INT NOT NULL,
 	"rifSucursal" "domRIF" NOT NULL,
 	"autorizado" VARCHAR(60),
-	"status" VARCHAR(10) CHECK("status" IN ("en proceso", "terminada")),
+	"status" VARCHAR(10) CHECK('status' IN ('en proceso', 'terminada')),
 	CONSTRAINT entradaSalida CHECK("fechaEntrada" < "fechaSalidaEstimada"),
 	PRIMARY KEY("nroSolicitud")
 );
@@ -298,11 +297,11 @@ CREATE TABLE "Proveedores"(
 
 --@block
 CREATE TABLE "OrdenesServicio"(
-	"nroSolicitud" "domCodigos" NOT NULL,
-	"codServicio" "domCodigos" NOT NULL,
+	"nroSolicitud" INT NOT NULL,
+	"codServicio" INT NOT NULL,
 	"nroActividad" INT NOT NULL,
-	"codProducto" "domCodigos" NOT NULL,
-	"fecha" DATETIME NOT NULL,
+	"codProducto" INT NOT NULL,
+	"fecha" TIMESTAMP NOT NULL,
 	"cedEmpleado" "domCedulas" NOT NULL,
 	"cantidad" "domCantidades" NOT NULL,
 	"unidadMedida" VARCHAR(12) NOT NULL,
@@ -311,10 +310,10 @@ CREATE TABLE "OrdenesServicio"(
 
 --@block
 CREATE TABLE "OrdenesCompra"(
-	"codOrdCompra" "domCodigos" NOT NULL,
-	"fecha" DATETIME NOT NULL,
-	"rifProveedor" "domCodigos" NOT NULL,
-	"rifSucursal" "domCodigos" NOT NULL,
+	"codOrdCompra" INT GENERATED ALWAYS AS IDENTITY NOT NULL,
+	"fecha" TIMESTAMP NOT NULL,
+	"rifProveedor" "domRIF" NOT NULL,
+	"rifSucursal" "domRIF" NOT NULL,
 	PRIMARY KEY("codOrdCompra")
 );
 
@@ -331,14 +330,14 @@ CREATE TABLE "ListasMantenimientos"(
 --@block
 CREATE TABLE "Distribuye"(
 	"rifProveedor" "domRIF" NOT NULL,
-	"codProducto" "domCodigos" NOT NULL,
+	"codProducto" INT NOT NULL,
 	PRIMARY KEY("rifProveedor", "codProducto")
 );
 
 --@block
 CREATE TABLE "Pide"(
-	"codOrdCompra" "domCodigos" NOT NULL,
-	"codProducto" "domCodigos" NOT NULL,
+	"codOrdCompra" INT NOT NULL,
+	"codProducto" INT NOT NULL,
 	"cantidad" "domCantidades" NOT NULL,
 	PRIMARY KEY("codOrdCompra", "codProducto")
 );
@@ -346,7 +345,7 @@ CREATE TABLE "Pide"(
 --@block
 CREATE TABLE "Almacena"(
 	"rifSucursal" "domRIF" NOT NULL,
-	"codProducto" "domCodigos" NOT NULL,
+	"codProducto" INT NOT NULL,
 	"existenciaTeorica" INT CHECK("existenciaTeorica" >= 0),
 	"cantidadFisica" INT CHECK("cantidadFisica" >= 0),
 	PRIMARY KEY("rifSucursal", "codProducto")
@@ -355,8 +354,8 @@ CREATE TABLE "Almacena"(
 --@block
 CREATE TABLE "Ajusta"(
 	"rifSucursal" "domRIF" NOT NULL,
-	"codProducto" "domCodigos" NOT NULL,
-	"fechaAjuste" DATETIME NOT NULL,
+	"codProducto" INT NOT NULL,
+	"fechaAjuste" TIMESTAMP NOT NULL,
 	"cantidad" "domCantidades" NOT NULL,
 	"tipoAjuste" VARCHAR(8)
 	CHECK("tipoAjuste" IN ('faltante', 'sobrante')),
@@ -365,17 +364,17 @@ CREATE TABLE "Ajusta"(
 
 --@block
 CREATE TABLE "DetallesSolicitudes"(
-	"nroSolicitud" "domCodigos" NOT NULL,
-	"codServicio" "domCodigos" NOT NULL,
-	"numActividad" INT NOT NULL,
+	"nroSolicitud" INT NOT NULL,
+	"codServicio" INT NOT NULL,
+	"nroActividad" INT NOT NULL,
 	"monto" "domMontos" NOT NULL,
 	PRIMARY KEY("nroSolicitud", "codServicio", "numActividad")
 );
 
 --@block
 CREATE TABLE "DetallesFacturasProv"(
-	"nroFacturaProv" "domCodigos" NOT NULL,
-	"codProducto" "domCodigos" NOT NULL,
+	"nroFacturaProv" INT NOT NULL,
+	"codProducto" INT NOT NULL,
 	"cantidad" "domCantidades" NOT NULL,
 	"precio" "domMontos" NOT NULL,
 	PRIMARY KEY("nroFacturaProv", "codProducto")
@@ -383,8 +382,8 @@ CREATE TABLE "DetallesFacturasProv"(
 
 --@block
 CREATE TABLE "DetallesFacturasAcces"(
-	"nroFacturaAcces" "domCodigos" NOT NULL,
-	"codAccesorio" "domCodigos" NOT NULL,
+	"nroFacturaAcces" INT NOT NULL,
+	"codAccesorio" INT NOT NULL,
 	"monto" "domMontos" NOT NULL,
 	PRIMARY KEY("nroFacturaServ", "codAccesorio")
 );
@@ -393,7 +392,7 @@ CREATE TABLE "DetallesFacturasAcces"(
 CREATE TABLE "DebeAplicarse"(
 	"marca" "domModelos" NOT NULL,
 	"modelo" VARCHAR(20) NOT NULL,
-	"codProducto" "domCodigos" NOT NULL,
+	"codProducto" INT NOT NULL,
 	"unidadMedida" VARCHAR(12) NOT NULL,
 	"cantidad" "domCantidades" NOT NULL,
 	PRIMARY KEY("marca", "modelo", "codProducto")
@@ -430,10 +429,7 @@ REFERENCES "Modelos"("marca", "modelo")
 ON UPDATE CASCADE ON DELETE RESTRICT,
 ADD FOREIGN KEY("cedMecanico")
 REFERENCES "Mecanicos"
-ON UPDATE CASCADE ON DELETE SET NULL,
-ADD FOREIGN KEY("cedEncargado")
-REFERENCES "Encargados"
-ON UPDATE CASCADE ON DELETE RESTRICT;
+ON UPDATE CASCADE ON DELETE SET NULL;
 
 --@block
 ALTER TABLE "Modelos"
