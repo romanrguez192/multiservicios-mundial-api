@@ -378,7 +378,7 @@ CREATE TABLE "DetallesSolicitudes"(
 );
 
 --@block
-CREATE TABLE "Lista"(
+CREATE TABLE "DetallesFacturasProv"(
 	"nroFacturaProv" "domCodigos" NOT NULL,
 	"codProducto" "domCodigos" NOT NULL,
 	"cantidad" "domCantidades" NOT NULL,
@@ -387,7 +387,7 @@ CREATE TABLE "Lista"(
 );
 
 --@block
-CREATE TABLE "Muestra"(
+CREATE TABLE "DetallesFacturasAcces"(
 	"nroFacturaAcces" "domCodigos" NOT NULL,
 	"codAccesorio" "domCodigos" NOT NULL,
 	"monto" "domMontos" NOT NULL,
@@ -663,7 +663,7 @@ REFERENCES "Actividades"("codServicio", "nroActividad")
 ON UPDATE CASCADE ON DELETE CASCADE;
 
 --@block
-ALTER TABLE "Lista"
+ALTER TABLE "DetallesFacturasProv"
 ADD FOREIGN KEY("nroFacturaProv")
 REFERENCES "FacturasProveedores"
 ON UPDATE CASCADE ON DELETE CASCADE,
@@ -672,7 +672,7 @@ REFERENCES "Productos"
 ON UPDATE CASCADE ON DELETE CASCADE;
 
 --@block
-ALTER TABLE "Muestra"
+ALTER TABLE "DetallesFacturasAcces"
 ADD FOREIGN KEY("nroFacturaAcces")
 REFERENCES "FacturasAccesorios"
 ON UPDATE CASCADE ON DELETE CASCADE,
