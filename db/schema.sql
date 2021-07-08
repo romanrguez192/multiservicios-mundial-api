@@ -41,7 +41,6 @@ CREATE TABLE "Empleados"(
 CREATE TABLE "Sucursales"(
 	"rifSucursal" "domRIF" NOT NULL,
 	"nombre" VARCHAR(40) NOT NULL,
-	"codSucursal" "domCodigos" UNIQUE NOT NULL,
 	"direccion" "domDirecciones" NOT NULL,
 	"ciudad" VARCHAR(20) NOT NULL,
 	"cedEncargado" domCedulas NOT NULL,
@@ -57,7 +56,7 @@ CREATE TABLE "Vehiculos"(
 	"fechaAdiquisicion" DATE NOT NULL,
 	"fechaRegistro" DATETIME NOT NULL,
 	"cedCliente" "domCedulas" NOT NULL,
-	"codMarca" "domCodigos" NOT NULL,
+	"marca" "domModelos" NOT NULL,
 	"modelo" "domModelos" NOT NULL,
 	"cedMecanico" "domCedulas",
 	PRIMARY KEY("codVehiculo")
@@ -71,13 +70,6 @@ CREATE TABLE "TiposVehiculos"(
 );
 
 --@block
-CREATE TABLE "Marcas"(
-	"codMarca" "domCodigos" NOT NULL,
-	"nombreMarca" VARCHAR(30) NOT NULL,
-	PRIMARY KEY("codMarca")
-);
-
---@block
 CREATE TABLE "Clientes"(
 	"cedCliente" "domCedulas" NOT NULL,
 	"nombre" VARCHAR(60) NOT NULL,
@@ -87,8 +79,8 @@ CREATE TABLE "Clientes"(
 
 --@block
 CREATE TABLE "Modelos"(
-	"codMarca" "domCodigos" NOT NULL,
-	"nombreModelo" VARCHAR(20) NOT NULL,
+	"marca" "domModelos" NOT NULL,
+	"modelo" VARCHAR(20) NOT NULL,
 	"descripcion" VARCHAR(50) NOT NULL,
 	"peso" REAL NOT NULL,
 	"octanaje" SMALLINT NOT NULL
@@ -98,7 +90,7 @@ CREATE TABLE "Modelos"(
 	"tipoAceiteCaja" VARCHAR(20) NOT NULL,
 	"tipoRefrigerante" VARCHAR(20) NOT NULL,
 	"codTipoVehiculo" "domCodigos" NOT NULL,
-	PRIMARY KEY("codMarca", "nombreModelo")
+	PRIMARY KEY("marca", "modelo")
 );
 
 --@block
@@ -168,6 +160,7 @@ CREATE TABLE "Coordina"(
 CREATE TABLE "Actividades"(
 	"codServicio" "domCodigos" NOT NULL,
 	"nroActividad" INT NOT NULL,
+	"precio" "domMontos" NOT NULL,
 	"descripcion" VARCHAR(100) NOT NULL,
 	"capacidad" "domCantidades" NOT NULL,
 	PRIMARY KEY("codServicio", "nroActividad")
@@ -177,6 +170,7 @@ CREATE TABLE "Actividades"(
 CREATE TABLE "Reservaciones"(
 	"nroReserva" "domCodigos" NOT NULL,
 	"fechaReserva" DATETIME NOT NULL,
+	"codServicio" "domCodigos" NOT NULL,
 	"fechaActividad" DATETIME NOT NULL,
 	"montoAbonado" "domMontos" NOT NULL,
 	"rifSucursal" "domRIF" NOT NULL,
@@ -196,9 +190,9 @@ CREATE TABLE "Facturas"(
 );
 
 --@block
-CREATE TABLE "FacturasServicio"(
+CREATE TABLE "FacturasServicios"(
 	"nroFactura" "domCodigos" NOT NULL,
-	"nroFicha" "domCodigos" NOT NULL,
+	"nroSolicitud" "domCodigos" NOT NULL,
 	PRIMARY KEY("nroFactura");
 );
 
@@ -238,32 +232,13 @@ CREATE TABLE "Pagos"(
 	"tipoPago" VARCHAR(10) NOT NULL
 	CHECK("tipoPago" IN ('reserva', 'servicio', 'accesorio')),
 	"nroReserva" "domCodigos",
-	"nroFicha" "domCodigos",
+	"nroFacturaServ" "domCodigos",
+	"moneda" VARCHAR(7) NOT NULL
+	CHECK("moneda" IN ('bolívar', 'divisa')),
+	"tipoTarjeta" VARCHAR (7)
+	CHECK("tipoTarjeta" IN ('débito', 'crédito')),
+	"nroTarjeta" INT,
 	PRIMARY KEY("nroPago")
-);
-
---@block
-CREATE TABLE "PagosEfectivo"(
-	"nroPago" "domCodigos" NOT NULL,
-	"moneda" VARCHAR(8) NOT NULL
-	CHECK("moneda" IN ('efectivo', 'divisa')),
-	PRIMARY KEY("nroPago")
-);
-
---@block
-CREATE TABLE "PagosTarjeta"(
-	"nroPago" "domCodigos" NOT NULL,
-	"nroTarjeta" INT NOT NULL,
-	"tipoTarjeta" VARCHAR(7) NOT NULL
-	CHECK("tipoTarjeta" IN ('credito', 'debito')),
-	"banco" VARCHAR(20) NOT NULL
-);
-
---@block
-CREATE TABLE "PagosTransferencia"(
-	"nroPago" "domCodigos" NOT NULL,
-	"nroReferencia" INT UNIQUE NOT NULL,
-	"banco" VARCHAR(20) NOT NULL
 );
 
 --@block
@@ -271,6 +246,7 @@ CREATE TABLE "Productos"(
 	"codProducto" "domCodigos" NOT NULL,
 	"nombre" VARCHAR(30) NOT NULL,
 	"descripcion" VARCHAR(80) NOT NULL,
+	"codLinea" "domCodigos" NOT NULL,
 	"fabricante" VARCHAR(20) NOT NULL,
 	"esEcologico" BOOL NOT NULL,
 	"precio" "domMontos" NOT NULL,
@@ -284,7 +260,6 @@ CREATE TABLE "Productos"(
 --@block
 CREATE TABLE "ProductosServicios"(
 	"codProducto" "domCodigos" NOT NULL,
-	"codLinea" "domCodigos" NOT NULL,
 	PRIMARY KEY("codProducto")
 );
 
@@ -302,16 +277,17 @@ CREATE TABLE "Accesorios"(
 );
 
 --@block
-CREATE TABLE "FichasRegistro"(
-	"nroFicha" "domCodigos" NOT NULL,
+CREATE TABLE "SolicitudesServicio"(
+	"nroSolicitud" "domCodigos" NOT NULL,
 	"fechaEntrada" DATETIME NOT NULL,
 	"fechaSalidaEstimada" DATETIME NOT NULL,
 	"fechaSalidaReal" DATETIME,
 	"codVehiculo" "domCodigos" NOT NULL,
 	"rifSucursal" "domRIF" NOT NULL,
-	"cedEmpAutorizado" "domCedulas",
+	"autorizado" VARCHAR(60),
+	"status" VARCHAR(10) CHECK("status" IN ("en proceso", "terminada")),
 	CONSTRAINT entradaSalida CHECK("fechaEntrada" < "fechaSalidaEstimada"),
-	PRIMARY KEY("nroFicha")
+	PRIMARY KEY("nroSolicitud")
 );
 
 --@block
@@ -327,15 +303,15 @@ CREATE TABLE "Proveedores"(
 
 --@block
 CREATE TABLE "OrdenesServicio"(
+	"nroSolicitud" "domCodigos" NOT NULL,
 	"codServicio" "domCodigos" NOT NULL,
-	"codVehiculo" "domCodigos" NOT NULL,
+	"nroActividad" INT NOT NULL,
 	"codProducto" "domCodigos" NOT NULL,
-	"cedEmpleado" "domCedulas" NOT NULL,
 	"fecha" DATETIME NOT NULL,
+	"cedEmpleado" "domCedulas" NOT NULL,
 	"cantidad" "domCantidades" NOT NULL,
 	"unidadMedida" VARCHAR(12) NOT NULL,
-	"nroFicha" "domCodigos" NOT NULL,
-	PRIMARY KEY("codServicio", "codVehiculo", "codProducto", "cedEmpleado", "fecha")
+	PRIMARY KEY("nroSolicitud", "codServicio", "nroActividad", "codProducto", "fecha")
 );
 
 --@block
@@ -348,13 +324,13 @@ CREATE TABLE "OrdenesCompra"(
 );
 
 --@block
-CREATE TABLE "ListasMantenimiento"(
-	"codMarca" "domCodigos" NOT NULL,
-	"nombreModelo" "domModelos" NOT NULL,
+CREATE TABLE "ListasMantenimientos"(
+	"marca" "domModelos" NOT NULL,
+	"modelo" "domModelos" NOT NULL,
 	"tiempoUso" INTERVAL NOT NULL,
 	"kilometraje" REAL NOT NULL CHECK("kilometraje" >= 0),
 	"mantenimiento" VARCHAR(100) NOT NULL,
-	PRIMARY KEY("codMarca", "nombreModelo", "tiempoUso", "kilometraje", "mantenimiento")
+	PRIMARY KEY("marca", "modelo", "tiempoUso", "kilometraje", "mantenimiento")
 );
 
 --@block
@@ -393,58 +369,40 @@ CREATE TABLE "Ajusta"(
 );
 
 --@block
-CREATE TABLE "Incluye"(
-	"nroFicha" "domCodigos" NOT NULL,
+CREATE TABLE "DetallesSolicitudes"(
+	"nroSolicitud" "domCodigos" NOT NULL,
 	"codServicio" "domCodigos" NOT NULL,
 	"numActividad" INT NOT NULL,
-	PRIMARY KEY("nroFicha", "codServicio", "numActividad")
-);
-
---@block
-CREATE TABLE "Detalla"(
-	"nroFacturaServ" "domCodigos" NOT NULL,
-	"codServicio" "domCodigos" NOT NULL,
 	"monto" "domMontos" NOT NULL,
-	PRIMARY KEY("nroFacturaServ", "codServicio")
+	PRIMARY KEY("nroSolicitud", "codServicio", "numActividad")
 );
 
 --@block
 CREATE TABLE "Lista"(
-	"nroFacturaServ" "domCodigos" NOT NULL,
+	"nroFacturaProv" "domCodigos" NOT NULL,
 	"codProducto" "domCodigos" NOT NULL,
 	"cantidad" "domCantidades" NOT NULL,
-	PRIMARY KEY("nroFactura", "codProducto")
+	"precio" "domMontos" NOT NULL,
+	PRIMARY KEY("nroFacturaProv", "codProducto")
 );
 
 --@block
 CREATE TABLE "Muestra"(
 	"nroFacturaAcces" "domCodigos" NOT NULL,
 	"codAccesorio" "domCodigos" NOT NULL,
+	"monto" "domMontos" NOT NULL,
 	PRIMARY KEY("nroFacturaServ", "codAccesorio")
 );
 
 --@block
-CREATE TABLE "HechaPara"(
-	"nroReserva" "domCodigos" NOT NULL,
-	"codServicio" "domCodigos" NOT NULL,
-	"numActividad" INT NOT NULL,
-	PRIMARY KEY("nroReserva", "codServicio", "numActividad")
-);
-
---@block
 CREATE TABLE "DebeAplicarse"(
-	"codMarca" "domCodigos" NOT NULL,
+	"marca" "domModelos" NOT NULL,
 	"modelo" VARCHAR(20) NOT NULL,
-	"codProductoServ" "domCodigos" NOT NULL,
+	"codProducto" "domCodigos" NOT NULL,
 	"unidadMedida" VARCHAR(12) NOT NULL,
 	"cantidad" "domCantidades" NOT NULL,
-	PRIMARY KEY("codMarca", "modelo", "codProductoServ")
+	PRIMARY KEY("marca", "modelo", "codProducto")
 );
-
-
-
-
-
 
 --@block
 ALTER TABLE "Encargados"
@@ -452,4 +410,281 @@ ADD FOREIGN KEY("cedula")
 REFERENCES "Trabajadores"
 ON UPDATE CASCADE ON DELETE CASCADE;
 
+--@block
+ALTER TABLE "Empleados"
+ADD FOREIGN KEY("cedula")
+REFERENCES "Trabajadores"
+ON UPDATE CASCADE ON DELETE CASCADE,
+ADD FOREIGN KEY("rifSucursal")
+REFERENCES "Sucursales"
+ON UPDATE CASCADE ON DELETE CASCADE;
 
+--@block
+ALTER TABLE "Sucursales"
+ADD FOREIGN KEY("cedEncargado")
+REFERENCES "Encargados"
+ON UPDATE CASCADE ON DELETE RESTRICT;
+
+--@block
+ALTER TABLE "Vehiculos"
+ADD FOREIGN KEY("cedCliente")
+REFERENCES "Clientes"
+ON UPDATE CASCADE ON DELETE CASCADE,
+ADD FOREIGN KEY("marca", "modelo")
+REFERENCES "Modelos"("marca", "modelo")
+ON UPDATE CASCADE ON DELETE RESTRICT,
+ADD FOREIGN KEY("cedMecanico")
+REFERENCES "Mecanicos"
+ON UPDATE CASCADE ON DELETE SET NULL,
+ADD FOREIGN KEY("cedEncargado")
+REFERENCES "Encargados"
+ON UPDATE CASCADE ON DELETE RESTRICT;
+
+--@block
+ALTER TABLE "Modelos"
+ADD FOREIGN KEY("codTipoVehiculo")
+REFERENCES "TiposVehiculos"
+ON UPDATE CASCADE ON DELETE RESTRICT;
+
+--@block
+ALTER TABLE "Mantenimientos"
+ADD FOREIGN KEY("codVehiculo")
+REFERENCES "Encargados"
+ON UPDATE CASCADE ON DELETE CASCADE;
+
+--@block
+ALTER TABLE "Telefonos"
+ADD FOREIGN KEY("cedCliente")
+REFERENCES "Clientes"
+ON UPDATE CASCADE ON DELETE CASCADE;
+
+--@block
+ALTER TABLE "Admite"
+ADD FOREIGN KEY("rifSucursal")
+REFERENCES "Sucursales"
+ON UPDATE CASCADE ON DELETE CASCADE,
+ADD FOREIGN KEY("codTipoVehiculo")
+REFERENCES "TiposVehiculos"
+ON UPDATE CASCADE ON DELETE CASCADE;
+
+--@block
+ALTER TABLE "Ofrece"
+ADD FOREIGN KEY("rifSucursal")
+REFERENCES "Sucursales"
+ON UPDATE CASCADE ON DELETE CASCADE,
+ADD FOREIGN KEY("codServicio")
+REFERENCES "Servicios"
+ON UPDATE CASCADE ON DELETE CASCADE;
+
+--@block
+ALTER TABLE "Asignado"
+ADD FOREIGN KEY("cedEmpleado")
+REFERENCES "Empleados"
+ON UPDATE CASCADE ON DELETE CASCADE,
+ADD FOREIGN KEY("codServicio")
+REFERENCES "Servicios"
+ON UPDATE CASCADE ON DELETE CASCADE;
+
+--@block
+ALTER TABLE "Coordina"
+ADD FOREIGN KEY("cedEmpleado")
+REFERENCES "Empleados"
+ON UPDATE CASCADE ON DELETE CASCADE,
+ADD FOREIGN KEY("codServicio")
+REFERENCES "Servicios"
+ON UPDATE CASCADE ON DELETE CASCADE;
+
+--@block
+ALTER TABLE "Actividades"
+ADD FOREIGN KEY("codServicio")
+REFERENCES "Servicios"
+ON UPDATE CASCADE ON DELETE CASCADE;
+
+--@block
+ALTER TABLE "Reservaciones"
+ADD FOREIGN KEY("rifSucursal")
+REFERENCES "Sucursales"
+ON UPDATE CASCADE ON DELETE CASCADE,
+ADD FOREIGN KEY("cedCliente")
+REFERENCES "Clientes"
+ON UPDATE CASCADE ON DELETE CASCADE,
+ADD FOREIGN KEY("codServicio")
+REFERENCES "Servicios"
+ON UPDATE CASCADE ON DELETE CASCADE;
+
+--@block
+ALTER TABLE "Facturas"
+ADD FOREIGN KEY("rifSucursal")
+REFERENCES "Sucursales"
+ON UPDATE CASCADE ON DELETE CASCADE;
+
+--@block
+ALTER TABLE "FacturasClientes"
+ADD FOREIGN KEY("nroFactura")
+REFERENCES "Facturas"
+ON UPDATE CASCADE ON DELETE CASCADE,
+ADD FOREIGN KEY("cedCliente")
+REFERENCES "Clientes"
+ON UPDATE CASCADE ON DELETE CASCADE;
+
+--@block
+ALTER TABLE "FacturasServicios"
+ADD FOREIGN KEY("nroFactura")
+REFERENCES "FacturasClientes"
+ON UPDATE CASCADE ON DELETE CASCADE,
+ADD FOREIGN KEY("nroSolicitud")
+REFERENCES "SolicitudesServicio"
+ON UPDATE CASCADE ON DELETE CASCADE;
+
+--@block
+ALTER TABLE "FacturasAccesorios"
+ADD FOREIGN KEY("nroFactura")
+REFERENCES "FacturasClientes"
+ON UPDATE CASCADE ON DELETE CASCADE,
+ADD FOREIGN KEY("nroPago")
+REFERENCES "Pagos"
+ON UPDATE CASCADE ON DELETE CASCADE;
+
+--@block
+ALTER TABLE "FacturasProveedores"
+ADD FOREIGN KEY("nroFactura")
+REFERENCES "Facturas"
+ON UPDATE CASCADE ON DELETE CASCADE,
+ADD FOREIGN KEY("rifProveedor")
+REFERENCES "Proveedores"
+ON UPDATE CASCADE ON DELETE CASCADE;
+
+--@block
+ALTER TABLE "Pagos"
+ADD FOREIGN KEY("nroReserva")
+REFERENCES "Reservaciones"
+ON UPDATE CASCADE ON DELETE CASCADE,
+ADD FOREIGN KEY("nroFacturaServ")
+REFERENCES "FacturasServicios"
+ON UPDATE CASCADE ON DELETE CASCADE;
+
+--@block
+ALTER TABLE "Productos"
+ADD FOREIGN KEY("codLinea")
+REFERENCES "Lineas"
+ON UPDATE CASCADE ON DELETE CASCADE;
+
+--@block
+ALTER TABLE "ProductosServicios"
+ADD FOREIGN KEY("codProducto")
+REFERENCES "Productos"
+ON UPDATE CASCADE ON DELETE CASCADE;
+
+--@block
+ALTER TABLE "Accesorios"
+ADD FOREIGN KEY("codProducto")
+REFERENCES "Productos"
+ON UPDATE CASCADE ON DELETE CASCADE;
+
+--@block
+ALTER TABLE "SolicitudesServicio"
+ADD FOREIGN KEY("codVehiculo")
+REFERENCES "Vehiculos"
+ON UPDATE CASCADE ON DELETE CASCADE,
+ADD FOREIGN KEY("rifSucursal")
+REFERENCES "Sucursales"
+ON UPDATE CASCADE ON DELETE CASCADE;
+
+--@block
+ALTER TABLE "OrdenesServicio"
+ADD FOREIGN KEY("nroSolicitud", "codServicio", "nroActividad")
+REFERENCES "DetallesSolicitudes"("nroSolicitud", "codServicio", "nroActividad")
+ON UPDATE CASCADE ON DELETE CASCADE,
+ADD FOREIGN KEY("codProducto")
+REFERENCES "ProductosServicios"
+ON UPDATE CASCADE ON DELETE CASCADE,
+ADD FOREIGN KEY("cedEmpleado")
+REFERENCES "Empleados"
+ON UPDATE CASCADE ON DELETE CASCADE;
+
+--@block
+ALTER TABLE "OrdenesCompra"
+ADD FOREIGN KEY("rifProveedor")
+REFERENCES "Proveedores"
+ON UPDATE CASCADE ON DELETE CASCADE,
+ADD FOREIGN KEY("rifSucursal")
+REFERENCES "Sucursales"
+ON UPDATE CASCADE ON DELETE CASCADE;
+
+--@block
+ALTER TABLE "ListasMantenimientos"
+ADD FOREIGN KEY("marca", "modelo")
+REFERENCES "Modelos"("marca", "modelo")
+ON UPDATE CASCADE ON DELETE CASCADE;
+
+--@block
+ALTER TABLE "Distribuye"
+ADD FOREIGN KEY("rifProveedor")
+REFERENCES "Proveedores"
+ON UPDATE CASCADE ON DELETE CASCADE,
+ADD FOREIGN KEY("codProducto")
+REFERENCES "Productos"
+ON UPDATE CASCADE ON DELETE CASCADE;
+
+--@block
+ALTER TABLE "Pide"
+ADD FOREIGN KEY("codOrdCompra")
+REFERENCES "OrdenesCompra"
+ON UPDATE CASCADE ON DELETE CASCADE,
+ADD FOREIGN KEY("codProducto")
+REFERENCES "Productos"
+ON UPDATE CASCADE ON DELETE CASCADE;
+
+--@block
+ALTER TABLE "Almacena"
+ADD FOREIGN KEY("rifSucursal")
+REFERENCES "Sucursales"
+ON UPDATE CASCADE ON DELETE CASCADE,
+ADD FOREIGN KEY("codProducto")
+REFERENCES "Productos"
+ON UPDATE CASCADE ON DELETE CASCADE;
+
+--@block
+ALTER TABLE "Ajusta"
+ADD FOREIGN KEY("rifSucursal")
+REFERENCES "Sucursales"
+ON UPDATE CASCADE ON DELETE CASCADE,
+ADD FOREIGN KEY("codProducto")
+REFERENCES "Productos"
+ON UPDATE CASCADE ON DELETE CASCADE;
+
+--@block
+ALTER TABLE "DetallesSolicitudes"
+ADD FOREIGN KEY("nroSolicitud")
+REFERENCES "SolicitudesServicio"
+ON UPDATE CASCADE ON DELETE CASCADE,
+ADD FOREIGN KEY("codServicio", "nroActividad")
+REFERENCES "Actividades"("codServicio", "nroActividad")
+ON UPDATE CASCADE ON DELETE CASCADE;
+
+--@block
+ALTER TABLE "Lista"
+ADD FOREIGN KEY("nroFacturaProv")
+REFERENCES "FacturasProveedores"
+ON UPDATE CASCADE ON DELETE CASCADE,
+ADD FOREIGN KEY("codProducto")
+REFERENCES "Productos"
+ON UPDATE CASCADE ON DELETE CASCADE;
+
+--@block
+ALTER TABLE "Muestra"
+ADD FOREIGN KEY("nroFacturaAcces")
+REFERENCES "FacturasAccesorios"
+ON UPDATE CASCADE ON DELETE CASCADE,
+ADD FOREIGN KEY("codAccesorio")
+REFERENCES "Accesorios"
+ON UPDATE CASCADE ON DELETE CASCADE;
+
+--@block
+ALTER TABLE "DebeAplicarse"
+ADD FOREIGN KEY("marca", "modelo")
+REFERENCES "Modelos"("marca", "modelo")
+ON UPDATE CASCADE ON DELETE CASCADE,
+ADD FOREIGN KEY("codProducto")
+REFERENCES "ProductosServicios"
+ON UPDATE CASCADE ON DELETE CASCADE;
