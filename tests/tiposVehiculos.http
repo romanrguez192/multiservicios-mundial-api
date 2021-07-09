@@ -1,0 +1,27 @@
+GET http://localhost:4000/api/tiposVehiculos
+
+###
+
+GET http://localhost:4000/api/tiposVehiculos/1
+
+###
+
+POST http://localhost:4000/api/tiposVehiculos
+Content-Type: application/json
+
+{
+    "descripcion": "Robusto"
+}
+
+###
+
+PUT http://localhost:4000/api/tiposVehiculos/1
+Content-Type: application/json
+
+{
+    "descripcion": "Deportivo"
+}
+
+###
+
+DELETE http://localhost:4000/api/tiposVehiculos/1
