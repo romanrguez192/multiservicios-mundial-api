@@ -19,6 +19,7 @@ const findById = async (codTipoVehiculo) => {
     FROM "TiposVehiculos" 
     WHERE "codTipoVehiculo" = $1
   `;
+
   const params = [codTipoVehiculo];
 
   const { rows } = await db.query(query, params);
@@ -32,6 +33,7 @@ const create = async (tipoVehiculo) => {
     VALUES($1)
     RETURNING *
   `;
+  
   const params = [tipoVehiculo.descripcion];
 
   const { rows } = await db.query(query, params);

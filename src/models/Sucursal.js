@@ -16,7 +16,12 @@ const findAll = async () => {
 };
 
 const findById = async (rifSucursal) => {
-  const query = `SELECT * FROM "Sucursales" WHERE "rifSucursal" = $1`;
+  const query = `
+    SELECT * 
+    FROM "Sucursales" 
+    WHERE "rifSucursal" = $1
+  `;
+
   const params = [rifSucursal];
 
   const { rows } = await db.query(query, params);
@@ -24,8 +29,13 @@ const findById = async (rifSucursal) => {
 };
 
 const create = async (sucursal) => {
-  const attributes = `("rifSucursal", "nombre", "direccion", "ciudad", "cedEncargado", "fechaInvFisico")`;
-  const query = `INSERT INTO "Sucursales" ${attributes} VALUES($1, $2, $3, $4, $5, $6) RETURNING *`;
+  const query = `
+    INSERT INTO "Sucursales"
+    ("rifSucursal", "nombre", "direccion", "ciudad", "cedEncargado", "fechaInvFisico")
+    VALUES($1, $2, $3, $4, $5, $6) 
+    RETURNING *
+  `;
+
   const params = [
     sucursal.rifSucursal,
     sucursal.nombre,
