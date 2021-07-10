@@ -1,5 +1,6 @@
 const db = require("../db");
 
+// Buscar todas las sucursales
 const findAll = async () => {
   const query = `
     SELECT s."rifSucursal", s."nombre", s."direccion", s."ciudad", t."cedula", t."nombre", t."apellido"
@@ -15,6 +16,7 @@ const findAll = async () => {
   return rows;
 };
 
+// Buscar una
 const findById = async (rifSucursal) => {
   const query = `
     SELECT * 
@@ -28,6 +30,7 @@ const findById = async (rifSucursal) => {
   return rows[0];
 };
 
+//Crear una sucursal
 const create = async (sucursal) => {
   const query = `
     INSERT INTO "Sucursales"
@@ -50,6 +53,7 @@ const create = async (sucursal) => {
   return rows[0];
 };
 
+//Actualizar una sucursal
 const update = async (rifSucursal, sucursal) => {
   const query = `
     UPDATE "Sucursales"
@@ -77,6 +81,7 @@ const update = async (rifSucursal, sucursal) => {
   return rows[0];
 };
 
+// Eliminar una sucursal
 const deleteSucursal = async (rifSucursal) => {
   const query = `
     DELETE FROM "Sucursales"

@@ -29,7 +29,8 @@ const findById = async (codTipoVehiculo) => {
 // Crear nuevo tipo de vehiculo
 const create = async (tipoVehiculo) => {
   const query = `
-    INSERT INTO "TiposVehiculos"(descripcion)
+    INSERT INTO "TiposVehiculos"
+    (descripcion)
     VALUES($1)
     RETURNING *
   `;

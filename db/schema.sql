@@ -36,7 +36,7 @@ CREATE TABLE "Empleados"(
 	PRIMARY KEY("cedula")
 );
 
---@block
+--@block LISTO
 CREATE TABLE "Sucursales"(
 	"rifSucursal" "domRIF" NOT NULL,
 	"nombre" VARCHAR(40) NOT NULL,
@@ -48,11 +48,11 @@ CREATE TABLE "Sucursales"(
 );
 
 
---@block
+--@block LISTO
 CREATE TABLE "Vehiculos"(
 	"codVehiculo" INT GENERATED ALWAYS AS IDENTITY NOT NULL,
 	"placa" VARCHAR(10) UNIQUE NOT NULL,
-	"fechaAdiquisicion" DATE NOT NULL,
+	"fechaAdquisicion" DATE NOT NULL,
 	"fechaRegistro" TIMESTAMP NOT NULL,
 	"cedCliente" "domCedulas" NOT NULL,
 	"marca" "domModelos" NOT NULL,
@@ -61,14 +61,14 @@ CREATE TABLE "Vehiculos"(
 	PRIMARY KEY("codVehiculo")
 );
 
---@block
+--@block LISTO
 CREATE TABLE "TiposVehiculos"(
 	"codTipoVehiculo" INT GENERATED ALWAYS AS IDENTITY NOT NULL,
 	"descripcion" VARCHAR(100) NOT NULL,
 	PRIMARY KEY("codTipoVehiculo")
 );
 
---@block
+--@block LISTO
 CREATE TABLE "Clientes"(
 	"cedCliente" "domCedulas" NOT NULL,
 	"nombre" VARCHAR(60) NOT NULL,
