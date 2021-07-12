@@ -79,7 +79,7 @@ const update = async (cedCliente, cliente) => {
 const deleteCliente = async (cedCliente) => {
   const query = `
     DELETE FROM "Clientes"
-    WHERE "codCliente" = $1
+    WHERE "cedCliente" = $1
   `;
 
   const params = [cedCliente];
