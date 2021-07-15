@@ -30,12 +30,12 @@ const findById = async (codTipoVehiculo) => {
 const create = async (tipoVehiculo) => {
   const query = `
     INSERT INTO "TiposVehiculos"
-    (descripcion)
-    VALUES($1)
+    (nombre, descripcion)
+    VALUES($1, $2)
     RETURNING *
   `;
   
-  const params = [tipoVehiculo.descripcion];
+  const params = [tipoVehiculo.nombre, tipoVehiculo.descripcion];
 
   const { rows } = await db.query(query, params);
 
@@ -46,12 +46,13 @@ const create = async (tipoVehiculo) => {
 const update = async (codTipoVehiculo, tipoVehiculo) => {
   const query = `
     UPDATE "TiposVehiculos"
-    SET "descripcion" = $1
+    SET "nombre" = $1
+    SET "descripcion" = $2
     WHERE "codTipoVehiculo" = $2
     RETURNING *
   `;
 
-  const params = [tipoVehiculo.descripcion, codTipoVehiculo];
+  const params = [tipoVehiculo.nombre, tipoVehiculo.descripcion, codTipoVehiculo];
 
   const { rows } = await db.query(query, params);
 

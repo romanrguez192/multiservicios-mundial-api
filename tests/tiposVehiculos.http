@@ -10,7 +10,8 @@ POST http://localhost:4000/api/tiposVehiculos
 Content-Type: application/json
 
 {
-    "descripcion": "Robusto"
+    "nombre": "Robusto",
+    "descripcion": "Es robuesto pues"
 }
 
 ###
@@ -19,7 +20,8 @@ PUT http://localhost:4000/api/tiposVehiculos/1
 Content-Type: application/json
 
 {
-    "descripcion": "Deportivo"
+    "nombre": "Deportivo",
+    "descripcion": "Es deportivo gg"
 }
 
 ###
