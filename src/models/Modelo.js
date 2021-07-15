@@ -59,15 +59,15 @@ const update = async (marca, nombreModelo, modelo) => {
   const query = `
     UPDATE "Modelos"
     SET "marca" = $1,
-    SET "modelo" = $2,
-    SET "descripcion" = $3,
-    SET "peso" = $4,
-    SET "octanaje" = $5,
-    SET "numPuestos" = $6,
-    SET "tipoAceiteMotor" = $7,
-    SET "tipoAceiteCaja" = $8,
-    SET "tipoRefrigerante" = $9,
-    SET "codTipoVehiculo" = $10
+    "modelo" = $2,
+    "descripcion" = $3,
+    "peso" = $4,
+    "octanaje" = $5,
+    "numPuestos" = $6,
+    "tipoAceiteMotor" = $7,
+    "tipoAceiteCaja" = $8,
+    "tipoRefrigerante" = $9,
+    "codTipoVehiculo" = $10
     WHERE "marca" = $11
     AND "modelo" = $12
     RETURNING *

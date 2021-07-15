@@ -51,8 +51,8 @@ const update = async (cedMecanico, mecanico) => {
   const query = `
     UPDATE "Mecanicos"
     SET "cedMecanico" = $1,
-    SET "nombre" = $2,
-    SET "telefono" = $3
+    "nombre" = $2,
+    "telefono" = $3
     WHERE "cedMecanico" = $4
     RETURNING *
   `;

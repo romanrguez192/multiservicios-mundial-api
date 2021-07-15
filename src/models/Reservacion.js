@@ -54,11 +54,11 @@ const update = async (nroReserva, reservacion) => {
   const query = `
     UPDATE "Reservaciones"
     SET "fechaReserva" = $1
-    SET "codServicio" = $2
-    SET "fechaActividad" = $3
-    SET "montoAbonado" = $4
-    SET "rifSucursal" = $5
-    SET "cedCliente" = $6
+    "codServicio" = $2,
+    "fechaActividad" = $3,
+    "montoAbonado" = $4,
+    "rifSucursal" = $5,
+    "cedCliente" = $6,
     WHERE "nroReserva" = $7
     RETURNING *
   `;

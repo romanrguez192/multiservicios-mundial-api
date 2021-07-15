@@ -54,11 +54,11 @@ const update = async (rifProveedor, proveedor) => {
   const query = `
     UPDATE "Proveedores"
     SET "rifProveedor" = $1,
-    SET "razonSocial" = $2,
-    SET "direccion" = $3,
-    SET "personaContacto" = $4,
-    SET "telefonoCelular" = $5,
-    SET "telefonoLocal" = $6
+    "razonSocial" = $2,
+    "direccion" = $3,
+    "personaContacto" = $4,
+    "telefonoCelular" = $5,
+    "telefonoLocal" = $6
     WHERE "rifProveedor" = $7
     RETURNING *
   `;

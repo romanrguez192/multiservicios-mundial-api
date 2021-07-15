@@ -46,9 +46,9 @@ const create = async (tipoVehiculo) => {
 const update = async (codTipoVehiculo, tipoVehiculo) => {
   const query = `
     UPDATE "TiposVehiculos"
-    SET "nombre" = $1
-    SET "descripcion" = $2
-    WHERE "codTipoVehiculo" = $2
+    SET "nombre" = $1,
+    "descripcion" = $2
+    WHERE "codTipoVehiculo" = $3
     RETURNING *
   `;
 
