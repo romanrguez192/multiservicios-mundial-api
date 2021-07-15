@@ -1,11 +1,4 @@
 const Router = require("express-promise-router");
-const {
-  getTiposVehiculos,
-  getTipoVehiculo,
-  addTipoVehiculo,
-  updateTipoVehiculo,
-  deleteTipoVehiculo,
-} = require("../controllers/tiposVehiculos");
 
 const router = new Router();
 
