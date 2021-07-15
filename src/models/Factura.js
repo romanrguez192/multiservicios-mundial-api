@@ -52,9 +52,9 @@ const update = async (nroFactura, factura) => {
   const query = `
     UPDATE "Facturas"
     SET "fechaFacturacion" = $1,
-    SET "montoTotal" = $2,
-    SET "tipoFactura" = $3,
-    SET "rifSucursal" = $4
+    "montoTotal" = $2,
+    "tipoFactura" = $3,
+    "rifSucursal" = $4
     WHERE "nroFactura" = $5
     RETURNING *
   `;

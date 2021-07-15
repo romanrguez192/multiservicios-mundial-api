@@ -57,14 +57,14 @@ const update = async (codProducto, producto) => {
   const query = `
     UPDATE "Productos"
     SET "nombre" = $1,
-    SET "descripcion" = $2,
-    SET "codLinea" = $3,
-    SET "fabricante" = $4,
-    SET "esEcologico" = $5,
-    SET "precio" = $6,
-    SET "nivelMinimo" = $7,
-    SET "nivelMaximo" = $8,
-    SET "tipoProducto" = $9
+    "descripcion" = $2,
+    "codLinea" = $3,
+    "fabricante" = $4,
+    "esEcologico" = $5,
+    "precio" = $6,
+    "nivelMinimo" = $7,
+    "nivelMaximo" = $8,
+    "tipoProducto" = $9
     WHERE "codProducto" = $10
     RETURNING *
   `;

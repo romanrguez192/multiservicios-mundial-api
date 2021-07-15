@@ -54,11 +54,11 @@ const update = async (codVehiculo, vehiculo) => {
   const query = `
     UPDATE "Vehiculos"
     SET "placa" = $1,
-    SET "fechaAdquisicion" = $2,
-    SET "cedCliente" = $3,
-    SET "marca" = $4,
-    SET "modelo" = $5,
-    SET "cedMecanico" = $6,
+    "fechaAdquisicion" = $2,
+    "cedCliente" = $3,
+    "marca" = $4,
+    "modelo" = $5,
+    "cedMecanico" = $6,
     WHERE "codVehiculo" = $7
     RETURNING *
   `;

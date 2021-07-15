@@ -53,10 +53,10 @@ const update = async (cedCliente, cliente) => {
   const query = `
     UPDATE "Clientes"
     SET "cedCliente" = $1,
-    SET "nombre" = $2,
-    SET "email" = $3,
-    SET "tlfPrincipal" = $4,
-    SET "tlfAlternativo" = $5
+    "nombre" = $2,
+    "email" = $3,
+    "tlfPrincipal" = $4,
+    "tlfAlternativo" = $5
     WHERE "cedCliente" = $6
     RETURNING *
   `;

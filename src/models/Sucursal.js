@@ -58,11 +58,11 @@ const update = async (rifSucursal, sucursal) => {
   const query = `
     UPDATE "Sucursales"
     SET "rifSucursal" = $1,
-    SET "nombre" = $2,
-    SET "direccion" = $3,
-    SET "ciudad" = $4,
-    SET "cedEncargado = $5,
-    SET "fechaInvFisico = $6
+    "nombre" = $2,
+    "direccion" = $3,
+    "ciudad" = $4,
+    "cedEncargado = $5,
+    "fechaInvFisico = $6
     WHERE "rifSucursal" = $7
   `;
 

@@ -50,7 +50,7 @@ const update = async (cedula, empleado) => {
   const query = `
     UPDATE "Empleados"
     SET "cedula" = $1,
-    SET "rifSucursal" = $2
+    "rifSucursal" = $2
     WHERE "cedula" = $3
     RETURNING *
   `;
