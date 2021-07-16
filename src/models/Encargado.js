@@ -16,7 +16,7 @@ const findAll = async () => {
 const findById = async (cedula) => {
   const query = `
     SELECT *
-    FROM "Encargados" 
+    FROM "VistaEncargados" 
     WHERE "cedula" = $1
   `;
 

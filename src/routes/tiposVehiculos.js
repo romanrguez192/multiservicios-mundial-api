@@ -1,4 +1,5 @@
 const Router = require("express-promise-router");
+const TipoVehiculo = require("../models/TipoVehiculo");
 
 const router = new Router();
 

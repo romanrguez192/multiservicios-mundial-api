@@ -5,7 +5,7 @@ CREATE DOMAIN "domRIF" AS VARCHAR(12);
 CREATE DOMAIN "domCedulas" AS INT;
 CREATE DOMAIN "domMontos" AS DECIMAL(14, 2) CHECK(VALUE > 0);
 CREATE DOMAIN "domModelos" AS VARCHAR(20);
-CREATE DOMAIN "domPorcentajes" AS DECIMAL(5, 2) CHECK(VALUE >= 0 AND VALUE <= 100);
+CREATE DOMAIN "domPorcentajes" AS DECIMAL(5, 2) CHECK(VALUE BETWEEN 0 AND 100);
 CREATE DOMAIN "domCantidades" AS INT CHECK(VALUE > 0);
 
 --@block
@@ -125,7 +125,7 @@ CREATE TABLE "Servicios"(
 	"requiereReserva" BOOL NOT NULL,
 	"minTiempoReserva" INTERVAL,
 	"porcentajeAbono" "domPorcentajes"
-	CHECK("porcentajeAbono" >= 20 AND "porcentajeAbono" <= 50),
+	CHECK("porcentajeAbono" BETWEEN 20 AND 50),
 	PRIMARY KEY("codServicio")
 );
 
@@ -194,7 +194,7 @@ CREATE TABLE "FacturasServicios"(
 CREATE TABLE "FacturasClientes"(
 	"nroFactura" INT NOT NULL,
 	"descuento" "domPorcentajes"
-	CHECK("descuento" >= 5 AND "descuento" <= 15),
+	CHECK("descuento" BETWEEN 5 AND 15),
 	"tipoCompra" VARCHAR(13) NOT NULL
 	CHECK("tipoCompra" IN ('accesorio', 'servicio')),
 	"cedCliente" "domCedulas" NOT NULL,

@@ -9,11 +9,11 @@ const main = async () => {
   );
 
   try {
-    const client = await db.connect();
+    const client = await db.getClient();
     console.log("Conectado a la base de datos");
     client.release();
   } catch (error) {
-    console.error("Error al conectar: ", err.stack);
+    console.error("Error al conectar: ", error.stack);
   }
 };
 

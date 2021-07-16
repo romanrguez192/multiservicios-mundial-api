@@ -1,5 +1,20 @@
 const db = require("../db");
 
+const login = async (usuario, contrasena) => {
+  const query = `
+    SELECT "cedula", "nombre", "apellido", "telefono", "direccion", "sueldo", "usuario", "tipoTrabajador"
+    FROM "Trabajadores"
+    WHERE "usuario" = $1
+    AND "contrasena" = $2
+  `;
+
+  const params = [usuario, contrasena];
+
+  const { rows } = await db.query(query, params);
+
+  return rows[0];
+};
+
 // Buscar todos los Empleados
 const findAll = async () => {
   const query = `
@@ -16,7 +31,7 @@ const findAll = async () => {
 const findById = async (cedula) => {
   const query = `
     SELECT *
-    FROM "VistaEmpleados" 
+    FROM "Empleados" 
     WHERE "cedula" = $1
   `;
 
@@ -28,12 +43,11 @@ const findById = async (cedula) => {
 
 // Crear nuevo empleado
 const create = async (empleado) => {
-
   const client = await db.getClient();
 
   try {
-    await client.query('BEGIN')
-    
+    await client.query("BEGIN TRANSACTION");
+
     const query1 = `
       INSERT INTO "Trabajadores"
       ("cedula", "nombre", "apellido", "telefono", "direccion", "usuario", "contrasena", "sueldo", "tipoTrabajador")
@@ -50,7 +64,7 @@ const create = async (empleado) => {
       empleado.usuario,
       empleado.contrasena,
       empleado.sueldo,
-    ]
+    ];
 
     const { rows1 } = await client.query(query1, params1);
 
@@ -61,26 +75,22 @@ const create = async (empleado) => {
       RETURNING *
     `;
 
-    const params2 = [
-      empleado.cedula,
-      empleado.rifSucursal,
-    ];
+    const params2 = [empleado.cedula, empleado.rifSucursal];
 
     const { rows2 } = await client.query(query2, params2);
-
-    await client.query('COMMIT TRANSACTION');
+    console.log("Va a hacer???????????????????????????");
+    await client.query("COMMIT TRANSACTION");
 
     const newEmpleado = { ...rows1, ...rows2 };
 
     return newEmpleado;
-
   } catch (e) {
-    await client.query('ROLLBACK');
+    console.log("AJA VOA HACER UN ROLLLLLLLLLLLLLLLLL");
+    await client.query("ROLLBACK");
     throw e;
   } finally {
     client.release();
   }
-
 };
 
 // Actualizar un empleado
@@ -93,11 +103,7 @@ const update = async (cedula, empleado) => {
     RETURNING *
   `;
 
-  const params = [
-    empleado.cedula,
-    empleado.rifSucursal,
-    cedula
-  ];
+  const params = [empleado.cedula, empleado.rifSucursal, cedula];
 
   const { rows } = await db.query(query, params);
 
@@ -116,5 +122,5 @@ const deleteEmpleado = async (cedula) => {
   await db.query(query, params);
 };
 
-module.exports = { findAll, findById, create, update };
+module.exports = { login, findAll, findById, create, update };
 module.exports.delete = deleteEmpleado;
