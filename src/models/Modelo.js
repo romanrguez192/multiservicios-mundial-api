@@ -3,8 +3,10 @@ const db = require("../db");
 // Buscar todos los modelos
 const findAll = async () => {
   const query = `
-    SELECT * 
-    FROM "Modelos"
+    SELECT "marca", "modelo", m."descripcion", "peso", "octanaje", "numPuestos", "tipoAceiteMotor", "tipoAceiteCaja", "tipoRefrigerante", m."codTipoVehiculo", t."nombre" AS "tipoVehiculo"
+    FROM "Modelos" AS m
+    JOIN "TiposVehiculos" AS t
+    ON m."codTipoVehiculo" = t."codTipoVehiculo"
   `;
 
   const { rows } = await db.query(query);
