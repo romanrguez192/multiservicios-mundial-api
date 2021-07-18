@@ -1,4 +1,5 @@
 const tiposVehiculos = require("./tiposVehiculos");
+const sucursales = require("./sucursales");
 const auth = require("./auth");
 const lineas = require("./lineas");
 const productosServicios = require("./productosServicios");
@@ -8,6 +9,7 @@ const proveedores = require("./proveedores");
 
 module.exports = (app) => {
   app.use("/api/tiposVehiculos", tiposVehiculos);
+  app.use("/api/sucursales", sucursales);
   app.use("/api/auth", auth);
   app.use("/api/lineas", lineas);
   app.use("/api/productosServicios", productosServicios);

@@ -3,12 +3,8 @@ const db = require("../db");
 // Buscar todas las sucursales
 const findAll = async () => {
   const query = `
-    SELECT s."rifSucursal", s."nombre", s."direccion", s."ciudad", t."cedula", t."nombre", t."apellido"
-    FROM "Sucursales" AS s
-    LEFT JOIN "Encargados" AS e
-    ON s."cedEncargado" = e."cedEncargado"
-    LEFT JOIN "Trabajadores" AS t
-    ON e."cedEncargado" = t."cedEncargado"
+    SELECT 
+    FROM "Sucursales"
   `;
 
   const { rows } = await db.query(query);
