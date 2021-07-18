@@ -52,7 +52,7 @@ const create = async (empleado) => {
       empleado.sueldo,
     ]
 
-    const { rows1 } = await client.query(query1, params1);
+    const { rows: rows1 } = await client.query(query1, params1);
 
     const query2 = `
       INSERT INTO "Empleados"
@@ -66,11 +66,11 @@ const create = async (empleado) => {
       empleado.rifSucursal,
     ];
 
-    const { rows2 } = await client.query(query2, params2);
+    const { rows: rows2 } = await client.query(query2, params2);
 
     await client.query('COMMIT TRANSACTION');
 
-    const newEmpleado = { ...rows1, ...rows2 };
+    const newEmpleado = { ...rows1[0], ...rows2[0] };
 
     return newEmpleado;
 

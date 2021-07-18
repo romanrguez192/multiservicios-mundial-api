@@ -17,3 +17,19 @@ SELECT "Encargados"."cedula", "nombre", "apellido", "fechaInicio", "telefono", "
 FROM "Encargados"
 JOIN "Trabajadores"
 ON "Encargados"."cedula" = "Trabajadores"."cedula";
+
+CREATE VIEW "VistaProductosServicios" AS
+SELECT ps."codProducto", "nombre", p."descripcion", p."codLinea", l."descripcion" AS "descripcionL", "fabricante", "esEcologico", "precio", "nivelMinimo", "nivelMaximo"
+FROM "ProductosServicios" AS ps
+JOIN "Productos" AS p
+ON ps."codProducto" = p."codProducto"
+JOIN "Lineas" AS l
+ON p."codLinea" = l."codLinea";
+
+CREATE VIEW "VistaProductosVentas" AS
+SELECT a."codProducto", "nombre", p."descripcion", p."codLinea", l."descripcion" AS "descripcionL", "fabricante", "esEcologico", "precio", "nivelMinimo", "nivelMaximo"
+FROM "Accesorios" AS a
+JOIN "Productos" AS p
+ON a."codProducto" = p."codProducto"
+JOIN "Lineas" AS l
+ON p."codLinea" = l."codLinea";
