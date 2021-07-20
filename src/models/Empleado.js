@@ -1,4 +1,5 @@
 const db = require("../db");
+const bcrypt = require("bcrypt");
 
 // Buscar todos los Empleados
 const findAll = async () => {
@@ -33,7 +34,7 @@ const create = async (empleado) => {
 
   try {
     await client.query('BEGIN')
-    
+    const hashedPass = await bcrypt.hash(empleado.contrasena, 10);
     const query1 = `
       INSERT INTO "Trabajadores"
       ("cedula", "nombre", "apellido", "telefono", "direccion", "usuario", "contrasena", "sueldo", "tipoTrabajador")
@@ -48,7 +49,7 @@ const create = async (empleado) => {
       empleado.telefono,
       empleado.direccion,
       empleado.usuario,
-      empleado.contrasena,
+      hashedPass,
       empleado.sueldo,
     ]
 

@@ -1,18 +1,19 @@
 const db = require("../db");
+const bcrypt = require("bcrypt");
 
 const login = async (usuario, contrasena) => {
   const query = `
-    SELECT "cedula", "nombre", "apellido", "telefono", "direccion", "sueldo", "usuario", "tipoTrabajador"
+    SELECT "cedula", "nombre", "apellido", "telefono", "direccion", "sueldo", "usuario", "tipoTrabajador", "contrasena"
     FROM "Trabajadores"
     WHERE "usuario" = $1
-    AND "contrasena" = $2
   `;
-
-  const params = [usuario, contrasena];
-
-  const { rows } = await db.query(query, params);
-
-  return rows[0];
+  const { rows } = await db.query(query, [usuario]);
+  
+  const match = await bcrypt.compare(contrasena, rows[0].contrasena);
+  if(match){
+    return rows[0];
+  }
+  return null;
 };
 
 // Buscar todos los Empleados
@@ -44,10 +45,12 @@ const findById = async (cedula) => {
 // Crear nuevo empleado
 const create = async (empleado) => {
   const client = await db.getClient();
-
+  
   try {
     await client.query("BEGIN TRANSACTION");
 
+    const hashedPass = await bcrypt.hash(empleado.contrasena, 10);
+    
     const query1 = `
       INSERT INTO "Trabajadores"
       ("cedula", "nombre", "apellido", "telefono", "direccion", "usuario", "contrasena", "sueldo", "tipoTrabajador")
@@ -62,7 +65,7 @@ const create = async (empleado) => {
       empleado.telefono,
       empleado.direccion,
       empleado.usuario,
-      empleado.contrasena,
+      hashedPass,
       empleado.sueldo,
     ];
 
