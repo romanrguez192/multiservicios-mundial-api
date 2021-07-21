@@ -32,7 +32,7 @@ const create = async (vehiculo) => {
     INSERT INTO "Vehiculos"
     ("placa", "fechaAdquisicion", "fechaRegistro", "cedCliente", "marca", "modelo", "cedMecanico")
     VALUES($1, $2, NOW(), $3, $4, $5, $6)
-    RETURNING *
+    RETURNING * 
   `;
 
   const params = [
@@ -58,7 +58,7 @@ const update = async (codVehiculo, vehiculo) => {
     "cedCliente" = $3,
     "marca" = $4,
     "modelo" = $5,
-    "cedMecanico" = $6,
+    "cedMecanico" = $6
     WHERE "codVehiculo" = $7
     RETURNING *
   `;
