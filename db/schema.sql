@@ -17,7 +17,7 @@ CREATE TABLE "Trabajadores"(
 	"direccion" "domDirecciones" NOT NULL,
 	"sueldo" "domMontos" NOT NULL,
 	"usuario" VARCHAR(35) UNIQUE NOT NULL,
-	"contrasena" VARCHAR(50) NOT NULL,
+	"contrasena" VARCHAR(255) NOT NULL,
 	"tipoTrabajador" VARCHAR(9) NOT NULL
 	CHECK("tipoTrabajador" IN ('dueño', 'empleado', 'encargado')),
 	PRIMARY KEY("cedula")
@@ -64,6 +64,7 @@ CREATE TABLE "Vehiculos"(
 --@block LISTO
 CREATE TABLE "TiposVehiculos"(
 	"codTipoVehiculo" INT GENERATED ALWAYS AS IDENTITY NOT NULL,
+	"nombre" VARCHAR(30) NOT NULL,
 	"descripcion" VARCHAR(100) NOT NULL,
 	PRIMARY KEY("codTipoVehiculo")
 );
