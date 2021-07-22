@@ -1,13 +1,16 @@
 const db = require("../db");
 
-// Buscar todas las actividades
-const findAll = async () => {
+// Buscar todas las actividades de un servicio
+const findAll = async (codServicio) => {
   const query = `
     SELECT * 
     FROM "Actividades"
+    WHERE "codServicio" = $1
   `;
 
-  const { rows } = await db.query(query);
+  const params = [codServicio]
+
+  const { rows } = await db.query(query, params);
 
   return rows;
 };
@@ -31,7 +34,7 @@ const findById = async (codServicio, nroActividad) => {
 };
 
 // Crear nueva actividad
-const create = async (actividad) => {
+const create = async (codServicio, actividad) => {
   const query = `
     INSERT INTO "Actividades"
     ("codServicio", "nroActividad", "precio", "descripcion", "capacidad")
@@ -40,7 +43,7 @@ const create = async (actividad) => {
   `;
   
   const params = [
-    actividad.codServicio,
+    codServicio,
     actividad.nroActividad,
     actividad.precio,
     actividad.descripcion,  
@@ -56,18 +59,16 @@ const create = async (actividad) => {
 const update = async (codServicio, nroActividad, actividad) => {
   const query = `
     UPDATE "Actividades"
-    SET "codServicio" = $1,
-    "nroActividad" = $2,
-    "precio" = $3,
-    "descripcion" = $4,
-    "capacidad" = $5
-    WHERE "codServicio" = $6 
-    AND "nroActividad" = $7
+    SET "nroActividad" = $1,
+    "precio" = $2,
+    "descripcion" = $3,
+    "capacidad" = $4
+    WHERE "codServicio" = $5 
+    AND "nroActividad" = $6
     RETURNING *
   `;
 
   const params = [
-    actividad.codServicio,
     actividad.nroActividad,
     actividad.precio,
     actividad.descripcion,  

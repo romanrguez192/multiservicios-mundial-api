@@ -1,7 +1,10 @@
 const Router = require("express-promise-router");
 const Servicio = require("../models/Servicio");
+const actividades = require("./actividades");
 
 const router = new Router();
+
+router.use("/:id/actividades", actividades);
 
 // Obtener todos
 router.get("/", async (req, res) => {

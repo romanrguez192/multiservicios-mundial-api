@@ -20,8 +20,6 @@ const findAll = async () => {
 
   fixMinTiempoReserva(rows);
 
-  console.log(rows);
-
   return rows;
 };
 
