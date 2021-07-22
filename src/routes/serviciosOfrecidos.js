@@ -6,7 +6,6 @@ const router = new Router();
 // Obtener todos de una sucursal
 router.get("/:id", async (req, res) => {
   const rifSucursal = parseInt(req.params.id);
-  console.log("A");
   const serviciosOfrecidos = await ServicioOfrecido.findAll(rifSucursal);
   res.json(serviciosOfrecidos);
 });

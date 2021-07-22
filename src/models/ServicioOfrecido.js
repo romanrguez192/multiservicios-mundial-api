@@ -21,7 +21,7 @@ const create = async (servicioOfrecido) => {
     INSERT INTO "Asignado"
     ("codServicio", "cedEmpleado", "esCoordinador")
     VALUES($1, $2, TRUE)
-    RETURNING *
+    RETURNING "codServicio", "cedEmpleado" AS "cedCoordinador"
   `;
 
   const params = [servicioOfrecido.codServicio, servicioOfrecido.cedEmpleado];
