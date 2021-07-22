@@ -33,3 +33,12 @@ JOIN "Productos" AS p
 ON pv."codProducto" = p."codProducto"
 JOIN "Lineas" AS l
 ON p."codLinea" = l."codLinea";
+
+CREATE VIEW "VistaServiciosOfrecidos" AS
+SELECT "rifSucursal", a."codServicio", s."nombre" AS "nombreServicio", a."cedEmpleado" AS "cedCoordinador", CONCAT(e."nombre", ' ', e."apellido") AS "nombreCoordinador"
+FROM "Asignado" AS a
+JOIN "Empleados" AS e
+ON a."cedEmpleado" = e."cedEmpleado"
+JOIN "Servicios" AS s
+ON a."codServicio" = s."codServicio"
+WHERE "esCoordinador" = TRUE;

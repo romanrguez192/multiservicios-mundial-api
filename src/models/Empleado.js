@@ -24,14 +24,17 @@ const login = async (usuario, contrasena) => {
   return null;
 };
 
-// Buscar todos los Empleados
-const findAll = async () => {
+// Buscar todos los Empleados por sucursal
+const findAll = async (rifSucursal) => {
   const query = `
-    SELECT * 
+    SELECT "cedEmpleado", "nombre", "apellido", "telefono", "direccion", "sueldo", "tipoEmpleado"
     FROM "Empleados"
+    WHERE "rifSucursal" = $1
   `;
 
-  const { rows } = await db.query(query);
+  const params = [rifSucursal];
+
+  const { rows } = await db.query(query, params);
 
   return rows;
 };
