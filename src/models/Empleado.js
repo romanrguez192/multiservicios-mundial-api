@@ -1,6 +1,29 @@
 const db = require("../db");
 const bcrypt = require("bcrypt");
 
+const login = async (usuario, contrasena) => {
+  const query = `
+    SELECT *
+    FROM "Empleados"
+    WHERE "usuario" = $1
+  `;
+
+  const { rows } = await db.query(query, [usuario]);
+
+  if (rows.length === 0) {
+    return null;
+  }
+
+  const match = await bcrypt.compare(contrasena, rows[0].contrasena);
+
+  if (match) {
+    delete rows[0].contrasena;
+    return rows[0];
+  }
+
+  return null;
+};
+
 // Buscar todos los Empleados
 const findAll = async () => {
   const query = `
@@ -17,8 +40,8 @@ const findAll = async () => {
 const findById = async (cedula) => {
   const query = `
     SELECT *
-    FROM "VistaEmpleados" 
-    WHERE "cedula" = $1
+    FROM "Empleados" 
+    WHERE "cedEmpleado" = $1
   `;
 
   const params = [cedula];
@@ -29,62 +52,33 @@ const findById = async (cedula) => {
 
 // Crear nuevo empleado
 const create = async (empleado) => {
+  const hashedPass = await bcrypt.hash(empleado.contrasena, 10);
 
-  const client = await db.getClient();
+  const query = `
+    INSERT INTO "Empleados"
+    ("cedEmpleado", "nombre", "apellido", "telefono", "direccion", "usuario", "contrasena", "sueldo", "tipoEmpleado", "rifSucursal")
+    VALUES($1, $2, $3, $4, $5, $6, $7, $8, 'personal', $9)
+    RETURNING *
+  `;
 
-  try {
-    await client.query('BEGIN')
-    const hashedPass = await bcrypt.hash(empleado.contrasena, 10);
-    const query1 = `
-      INSERT INTO "Trabajadores"
-      ("cedula", "nombre", "apellido", "telefono", "direccion", "usuario", "contrasena", "sueldo", "tipoTrabajador")
-      VALUES($1, $2, $3, $4, $5, $6, $7, $8, 'empleado')
-      RETURNING *
-    `;
+  const params = [
+    empleado.cedula,
+    empleado.nombre,
+    empleado.apellido,
+    empleado.telefono,
+    empleado.direccion,
+    empleado.usuario,
+    hashedPass,
+    empleado.sueldo,
+    empleado.rifSucursal,
+  ];
 
-    const params1 = [
-      empleado.cedula,
-      empleado.nombre,
-      empleado.apellido,
-      empleado.telefono,
-      empleado.direccion,
-      empleado.usuario,
-      hashedPass,
-      empleado.sueldo,
-    ]
+  const { rows } = await db.query(query, params);
 
-    const { rows: rows1 } = await client.query(query1, params1);
-
-    const query2 = `
-      INSERT INTO "Empleados"
-      ("cedula", "rifSucursal")
-      VALUES($1, $2)
-      RETURNING *
-    `;
-
-    const params2 = [
-      empleado.cedula,
-      empleado.rifSucursal,
-    ];
-
-    const { rows: rows2 } = await client.query(query2, params2);
-
-    await client.query('COMMIT TRANSACTION');
-
-    const newEmpleado = { ...rows1[0], ...rows2[0] };
-
-    return newEmpleado;
-
-  } catch (e) {
-    await client.query('ROLLBACK');
-    throw e;
-  } finally {
-    client.release();
-  }
-
+  return rows[0];
 };
 
-// Actualizar un empleado
+// Actualizar un empleado //TODO: Cambiar esto y el Delete
 const update = async (cedula, empleado) => {
   const query = `
     UPDATE "Empleados"
@@ -94,11 +88,7 @@ const update = async (cedula, empleado) => {
     RETURNING *
   `;
 
-  const params = [
-    empleado.cedula,
-    empleado.rifSucursal,
-    cedula
-  ];
+  const params = [empleado.cedula, empleado.rifSucursal, cedula];
 
   const { rows } = await db.query(query, params);
 
@@ -117,5 +107,5 @@ const deleteEmpleado = async (cedula) => {
   await db.query(query, params);
 };
 
-module.exports = { findAll, findById, create, update };
+module.exports = { login, findAll, findById, create, update };
 module.exports.delete = deleteEmpleado;

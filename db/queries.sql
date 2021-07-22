@@ -27,9 +27,9 @@ JOIN "Lineas" AS l
 ON p."codLinea" = l."codLinea";
 
 CREATE VIEW "VistaProductosVentas" AS
-SELECT a."codProducto", "nombre", p."descripcion", p."codLinea", l."descripcion" AS "descripcionL", "fabricante", "esEcologico", "precio", "nivelMinimo", "nivelMaximo"
-FROM "Accesorios" AS a
+SELECT pv."codProducto", "nombre", p."descripcion", p."codLinea", l."descripcion" AS "descripcionL", "fabricante", "esEcologico", "precio", "nivelMinimo", "nivelMaximo"
+FROM "ProductosVentas" AS pv
 JOIN "Productos" AS p
-ON a."codProducto" = p."codProducto"
+ON pv."codProducto" = p."codProducto"
 JOIN "Lineas" AS l
 ON p."codLinea" = l."codLinea";

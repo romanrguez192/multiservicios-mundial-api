@@ -1,20 +1,4 @@
 const db = require("../db");
-const bcrypt = require("bcrypt");
-
-const login = async (usuario, contrasena) => {
-  const query = `
-    SELECT "cedula", "nombre", "apellido", "telefono", "direccion", "sueldo", "usuario", "tipoTrabajador", "contrasena"
-    FROM "Trabajadores"
-    WHERE "usuario" = $1
-  `;
-  const { rows } = await db.query(query, [usuario]);
-  
-  const match = await bcrypt.compare(contrasena, rows[0].contrasena);
-  if(match){
-    return rows[0];
-  }
-  return null;
-};
 
 // Buscar todos los Empleados
 const findAll = async () => {

@@ -1,13 +1,26 @@
 const db = require("../db");
 
+const fixMinTiempoReserva = (rows) => {
+  rows.forEach((r) => {
+    if (r.minTiempoReserva) {
+      const d = r.minTiempoReserva.days;
+      r.minTiempoReserva = d + " day" + (d > 1 ? "s" : "");
+    }
+  });
+};
+
 // Buscar todos los Servicios
 const findAll = async () => {
   const query = `
-    SELECT * 
+    SELECT "codServicio", "nombre", "descripcion", "minTiempoReserva", "porcentajeAbono"
     FROM "Servicios"
   `;
 
   const { rows } = await db.query(query);
+
+  fixMinTiempoReserva(rows);
+
+  console.log(rows);
 
   return rows;
 };
@@ -23,6 +36,9 @@ const findById = async (codServicio) => {
   const params = [codServicio];
 
   const { rows } = await db.query(query, params);
+
+  fixMinTiempoReserva(rows);
+
   return rows[0];
 };
 
@@ -30,20 +46,21 @@ const findById = async (codServicio) => {
 const create = async (servicio) => {
   const query = `
     INSERT INTO "Servicios"
-    ("nombre", "descripcion", "requiereReserva", "minTiempoReserva", "porcentajeAbono")
-    VALUES($1, $2, $3, $4, $5)
+    ("nombre", "descripcion", "minTiempoReserva", "porcentajeAbono")
+    VALUES($1, $2, $3, $4)
     RETURNING *
   `;
 
   const params = [
     servicio.nombre,
     servicio.descripcion,
-    servicio.requiereReserva,
     servicio.minTiempoReserva,
     servicio.porcentajeAbono,
   ];
 
   const { rows } = await db.query(query, params);
+
+  fixMinTiempoReserva(rows);
 
   return rows[0];
 };
@@ -54,23 +71,23 @@ const update = async (codServicio, servicio) => {
     UPDATE "Servicios"
     SET "nombre" = $1,
     "descripcion" = $2,
-    "requiereReserva" = $3,
-    "minTiempoReserva" = $4,
-    "porcentajeAbono" = $5
-    WHERE "codServicio" = $6
+    "minTiempoReserva" = $3,
+    "porcentajeAbono" = $4
+    WHERE "codServicio" = $5
     RETURNING *
   `;
 
   const params = [
     servicio.nombre,
     servicio.descripcion,
-    servicio.requiereReserva,
     servicio.minTiempoReserva,
     servicio.porcentajeAbono,
     codServicio,
   ];
 
   const { rows } = await db.query(query, params);
+
+  fixMinTiempoReserva(rows);
 
   return rows[0];
 };

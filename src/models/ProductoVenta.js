@@ -54,7 +54,7 @@ const create = async (producto) => {
     const { rows: rows1 } = await client.query(query1, params1);
 
     const query2 = `
-      INSERT INTO "Accesorios"
+      INSERT INTO "ProductosVentas"
       ("codProducto")
       VALUES($1)
       RETURNING *
@@ -129,7 +129,7 @@ const deleteProducto = async (codProducto) => {
     await client.query(query1, params);
 
     const query2 = `
-      DELETE FROM "Accesorios"
+      DELETE FROM "ProductosVentas"
       WHERE "codProducto" = $1
     `;
 
