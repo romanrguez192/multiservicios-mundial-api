@@ -10,6 +10,7 @@ const modelos = require("./modelos");
 const servicios = require("./servicios");
 const vehiculos = require("./vehiculos");
 const reservaciones = require("./reservaciones");
+const clientes = require("./clientes");
 
 module.exports = (app) => {
   app.use("/api/tiposVehiculos", tiposVehiculos);

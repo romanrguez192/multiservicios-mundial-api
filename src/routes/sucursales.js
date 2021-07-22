@@ -3,20 +3,20 @@ const Sucursal = require("../models/Sucursal");
 
 const router = new Router();
 
-//Obtener todos
+//Obtener todas
 router.get("/", async (req, res) => {
   const sucursales = await Sucursal.findAll();
   res.json(sucursales);
 });
 
-//Obtener uno
+//Obtener una
 router.get("/:id", async (req, res) => {
   const rifSucursal = parseInt(req.params.id);
   const sucursal = await Sucursal.findById(rifSucursal);
   res.json(sucursal);
 });
 
-//Crear uno
+//Crear una
 router.post("/", async (req, res) => {
   const sucursal = await Sucursal.create(req.body);
   res.status(201).json(sucursal);
