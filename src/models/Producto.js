@@ -19,7 +19,7 @@ const findById = async (codProducto) => {
     FROM "Productos" 
     WHERE "codProducto" = $1
   `;
-f
+
   const params = [codProducto];
 
   const { rows } = await db.query(query, params);

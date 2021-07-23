@@ -36,7 +36,7 @@ const create = async (producto) => {
     const query1 = `
       INSERT INTO "Productos"
       ("nombre", "descripcion", "codLinea", "fabricante", "esEcologico", "precio", "nivelMinimo", "nivelMaximo", "tipoProducto")
-      VALUES($1, $2, $3, $4, $5, $6, $7, $8, 'servicio')
+      VALUES($1, $2, $3, $4, $5, $6, $7, $8, 'venta')
       RETURNING *
     `;
 
@@ -89,8 +89,7 @@ const update = async (codProducto, producto) => {
     "precio" = $6,
     "nivelMinimo" = $7,
     "nivelMaximo" = $8,
-    "tipoProducto" = $9
-    WHERE "codProducto" = $10
+    WHERE "codProducto" = $9
     RETURNING *
   `;
 
@@ -103,7 +102,6 @@ const update = async (codProducto, producto) => {
     producto.precio,
     producto.nivelMinimo,
     producto.nivelMaximo,
-    producto.tipoProducto,
     codProducto,
   ];
 

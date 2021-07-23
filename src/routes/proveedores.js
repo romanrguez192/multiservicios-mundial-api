@@ -1,7 +1,10 @@
 const Router = require("express-promise-router");
 const Proveedor = require("../models/Proveedor");
+const productosProveedor = require("./productosProveedor");
 
 const router = new Router();
+
+router.use("/:rif/productos", productosProveedor);
 
 // Obtener todos
 router.get("/", async (req, res) => {

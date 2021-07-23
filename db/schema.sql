@@ -210,9 +210,9 @@ CREATE TABLE "Productos"(
 	"fabricante" VARCHAR(20) NOT NULL,
 	"esEcologico" BOOL NOT NULL,
 	"precio" "domMontos" NOT NULL,
-	"nivelMinimo" INT CHECK("nivelMinimo" >= 0),
-	"nivelMaximo" INT CHECK("nivelMaximo" > "nivelMinimo"),
-	"tipoProducto" VARCHAR(8)
+	"nivelMinimo" INT NOT NULL CHECK("nivelMinimo" >= 0),
+	"nivelMaximo" INT NOT NULL CHECK("nivelMaximo" > "nivelMinimo"),
+	"tipoProducto" VARCHAR(8) NOT NULL
 	CHECK("tipoProducto" IN ('venta', 'servicio')),
 	PRIMARY KEY("codProducto")
 );
