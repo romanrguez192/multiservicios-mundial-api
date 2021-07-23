@@ -1,11 +1,14 @@
 const db = require("../db");
 
 // Buscar todas las reservaciones
-const findAll = async () => {
+const findAll = async (rifSucursal) => {
   const query = `
     SELECT * 
     FROM "Reservaciones"
+    WHERE "rifSucursal" = $1
   `;
+
+  const params = [rifSucursal];
 
   const { rows } = await db.query(query);
 

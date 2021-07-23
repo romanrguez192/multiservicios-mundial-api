@@ -5,7 +5,8 @@ const router = new Router();
 
 // Obtener todas
 router.get("/", async (req, res) => {
-  const reservaciones = await Reservacion.findAll();
+  const rifSucursal = parseInt(req.query.rifSucursal);
+  const reservaciones = await Reservacion.findAll(rifSucursal);
   res.json(reservaciones);
 });
 
