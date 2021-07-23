@@ -16,20 +16,19 @@ router.post("/", async (req, res) => {
   res.status(201).json(servicioOfrecido);
 });
 
-// TODO: OJO
-// // Actualizar
-// router.put("/:id", async (req, res) => {
-//   const codServicioOfrecido = parseInt(req.params.id);
-//   const servicioOfrecido = await ServicioOfrecido.update(
-//     codServicioOfrecido,
-//     req.body
-//   );
-//   res.json(servicioOfrecido);
-// });
+// Actualizar
+router.put("/:codServicio/:cedEmpleado", async (req, res) => {
+  const codServicio = parseInt(req.params.codServicio);
+  const cedEmpleado = parseInt(req.params.cedEmpleado);
+  const cedNuevoCoordinador = parseInt(req.body.cedCoordinador);
+  const servicioOfrecido = await ServicioOfrecido.update(codServicio, cedEmpleado, cedNuevoCoordinador);
+  res.json(servicioOfrecido);
+});
 
 // Borrar
 router.delete("/:codServicio/:cedEmpleado", async (req, res) => {
-  const { codServicio, cedEmpleado } = req.params;
+  const codServicio = parseInt(req.params.codServicio);
+  const cedEmpleado = parseInt(req.params.cedEmpleado);
   await ServicioOfrecido.delete(codServicio, cedEmpleado);
   res.json({ message: "Servicio eliminado" });
 });
