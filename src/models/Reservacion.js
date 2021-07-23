@@ -34,12 +34,11 @@ const create = async (reservacion) => {
   const query = `
     INSERT INTO "Reservaciones"
     ("fechaReserva", "codServicio", "fechaActividad", "montoAbonado", "rifSucursal", "cedCliente")
-    VALUES($1, $2, $3, $4, $5, $6)
+    VALUES(NOW(), $1, $2, $3, $4, $5)
     RETURNING *
   `;
   
   const params = [
-    reservacion.fechaReserva,
     reservacion.codServicio,
     reservacion.fechaActividad,
     reservacion.montoAbonado,
@@ -56,18 +55,16 @@ const create = async (reservacion) => {
 const update = async (nroReserva, reservacion) => {
   const query = `
     UPDATE "Reservaciones"
-    SET "fechaReserva" = $1
-    "codServicio" = $2,
-    "fechaActividad" = $3,
-    "montoAbonado" = $4,
-    "rifSucursal" = $5,
-    "cedCliente" = $6,
-    WHERE "nroReserva" = $7
+    SET "codServicio" = $1,
+    "fechaActividad" = $2,
+    "montoAbonado" = $3,
+    "rifSucursal" = $4,
+    "cedCliente" = $5
+    WHERE "nroReserva" = $6
     RETURNING *
   `;
 
   const params = [
-    reservacion.fechaReserva, 
     reservacion.codServicio, 
     reservacion.fechaActividad, 
     reservacion.montoAbonado, 

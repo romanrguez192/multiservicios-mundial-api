@@ -30,8 +30,8 @@ const findById = async (codVehiculo) => {
 const create = async (vehiculo) => {
   const query = `
     INSERT INTO "Vehiculos"
-    ("placa", "fechaAdquisicion", "fechaRegistro", "cedCliente", "marca", "modelo", "cedMecanico")
-    VALUES($1, $2, NOW(), $3, $4, $5, $6)
+    ("placa", "fechaAdquisicion", "fechaRegistro", "cedCliente", "marca", "modelo", "nombreMecanico", "tlfMecanico")
+    VALUES($1, $2, NOW(), $3, $4, $5, $6, $7)
     RETURNING * 
   `;
 
@@ -41,7 +41,8 @@ const create = async (vehiculo) => {
     vehiculo.cedCliente,
     vehiculo.marca,
     vehiculo.modelo,
-    vehiculo.cedMecanico,
+    vehiculo.nombreMecanico,
+    vehiculo.tlfMecanico
   ];
 
   const { rows } = await db.query(query, params);
@@ -58,8 +59,9 @@ const update = async (codVehiculo, vehiculo) => {
     "cedCliente" = $3,
     "marca" = $4,
     "modelo" = $5,
-    "cedMecanico" = $6
-    WHERE "codVehiculo" = $7
+    "nombreMecanico" = $6,
+    "tlfMecanico" = $7
+    WHERE "codVehiculo" = $8
     RETURNING *
   `;
 
@@ -69,7 +71,8 @@ const update = async (codVehiculo, vehiculo) => {
     vehiculo.cedCliente,
     vehiculo.marca,
     vehiculo.modelo,
-    vehiculo.cedMecanico,
+    vehiculo.nombreMecanico,
+    vehiculo.tlfMecanico,
     codVehiculo
   ];
 
