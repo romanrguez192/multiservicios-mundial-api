@@ -58,7 +58,7 @@ CREATE TABLE "Vehiculos"(
 CREATE TABLE "TiposVehiculos"(
 	"codTipoVehiculo" INT GENERATED ALWAYS AS IDENTITY NOT NULL,
 	"nombre" VARCHAR(30) NOT NULL,
-	"descripcion" VARCHAR(100) NOT NULL,
+	"descripcion" VARCHAR(500) NOT NULL,
 	PRIMARY KEY("codTipoVehiculo")
 );
 
@@ -76,7 +76,7 @@ CREATE TABLE "Clientes"(
 CREATE TABLE "Modelos"(
 	"marca" "domModelos" NOT NULL,
 	"modelo" VARCHAR(20) NOT NULL,
-	"descripcion" VARCHAR(50) NOT NULL,
+	"descripcion" VARCHAR(500) NOT NULL,
 	"peso" REAL NOT NULL,
 	"octanaje" SMALLINT NOT NULL
 	CHECK("octanaje" IN (91, 95)),
@@ -92,7 +92,7 @@ CREATE TABLE "Modelos"(
 CREATE TABLE "MantenimientosPasados"(
 	"codVehiculo" INT NOT NULL,
 	"fechaMant" DATE NOT NULL,
-	"descripcion" VARCHAR(100) NOT NULL,
+	"descripcion" VARCHAR(500) NOT NULL,
 	PRIMARY KEY("codVehiculo", "fechaMant")
 );
 
@@ -100,7 +100,7 @@ CREATE TABLE "MantenimientosPasados"(
 CREATE TABLE "Servicios"(
 	"codServicio" INT GENERATED ALWAYS AS IDENTITY NOT NULL,
 	"nombre" VARCHAR(60) NOT NULL,
-	"descripcion" VARCHAR(100) NOT NULL,
+	"descripcion" VARCHAR(500) NOT NULL,
 	"minTiempoReserva" INTERVAL,
 	"porcentajeAbono" "domPorcentajes",
 	CONSTRAINT "abonoValido"
@@ -123,7 +123,7 @@ CREATE TABLE "Actividades"(
 	"codServicio" INT NOT NULL,
 	"nroActividad" INT NOT NULL,
 	"precio" "domMontos" NOT NULL,
-	"descripcion" VARCHAR(100) NOT NULL,
+	"descripcion" VARCHAR(500) NOT NULL,
 	"capacidad" "domCantidades" NOT NULL,
 	PRIMARY KEY("codServicio", "nroActividad")
 );
