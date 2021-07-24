@@ -83,24 +83,24 @@ const create = async (empleado) => {
   return rows[0];
 };
 
-// Actualizar un empleado //TODO: Cambiar esto y el Delete
+// Actualizar un empleado TODO: Cambiar hacer más completo en caso de
 const update = async (cedula, empleado) => {
   const query = `
     UPDATE "Empleados"
-    SET "cedula" = $1,
-    "rifSucursal" = $2
-    WHERE "cedula" = $3
+    SET "sueldo" = $1,
+    "tipoEmpleado" = $2
+    WHERE "cedEmpleado" = $3
     RETURNING *
   `;
 
-  const params = [empleado.cedula, empleado.rifSucursal, cedula];
+  const params = [empleado.sueldo, empleado.tipoEmpleado, cedula];
 
   const { rows } = await db.query(query, params);
 
   return rows[0];
 };
 
-// Eliminar un empleado
+// Eliminar un empleado TODO: Cambiar esto en caso de
 const deleteEmpleado = async (cedula) => {
   const query = `
     DELETE FROM "Empleados"
