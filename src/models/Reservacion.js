@@ -1,13 +1,16 @@
 const db = require("../db");
 
 // Buscar todas las reservaciones
-const findAll = async () => {
+const findAll = async (rifSucursal) => {
   const query = `
     SELECT * 
     FROM "Reservaciones"
+    WHERE "rifSucursal" = $1
   `;
 
-  const { rows } = await db.query(query);
+  const params = [rifSucursal];
+
+  const { rows } = await db.query(query, params);
 
   return rows;
 };
@@ -30,8 +33,8 @@ const findById = async (nroReserva) => {
 const create = async (reservacion) => {
   const query = `
     INSERT INTO "Reservaciones"
-    ("fechaReserva", "codServicio", "fechaActividad", "montoAbonado", "rifSucursal", "cedCliente")
-    VALUES(NOW(), $1, $2, $3, $4, $5)
+    ("fechaReserva", "codServicio", "fechaActividad", "montoAbonado", "rifSucursal", "cedCliente", "status")
+    VALUES(NOW(), $1, $2, $3, $4, $5, 'pendiente')
     RETURNING *
   `;
   
@@ -56,8 +59,9 @@ const update = async (nroReserva, reservacion) => {
     "fechaActividad" = $2,
     "montoAbonado" = $3,
     "rifSucursal" = $4,
-    "cedCliente" = $5
-    WHERE "nroReserva" = $6
+    "cedCliente" = $5,
+    "status" = $6
+    WHERE "nroReserva" = $7
     RETURNING *
   `;
 
@@ -67,6 +71,7 @@ const update = async (nroReserva, reservacion) => {
     reservacion.montoAbonado, 
     reservacion.rifSucursal, 
     reservacion.cedCliente, 
+    reservacion.status, 
     nroReserva
   ];
 
