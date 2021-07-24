@@ -12,6 +12,20 @@ const findAll = async () => {
   return rows;
 };
 
+// Buscar por sucursal
+const findBySucursal = async (rifSucursal) => {
+  const query = `
+    SELECT *
+    FROM "Clientes" 
+    WHERE "rifSucursal" = $1
+  `;
+
+  const params = [cedCliente];
+
+  const { rows } = await db.query(query, params);
+  return rows[0];
+};
+
 // Buscar por cédula
 const findById = async (cedCliente) => {
   const query = `

@@ -138,6 +138,9 @@ CREATE TABLE "Reservaciones"(
 	"rifSucursal" "domRIF" NOT NULL,
 	"cedCliente" "domCedulas" NOT NULL,
 	"nroSolicitud" INT,
+	"status" VARCHAR(9) NOT NULL,
+	CONSTRAINT "statusValido"
+	CHECK("status" IN ('pendiente', 'atendida', 'cancelada', 'perdida')),
 	CONSTRAINT "fechasValidas"
 	CHECK("fechaReserva" < "fechaActividad"),
 	PRIMARY KEY("nroReserva")

@@ -31,4 +31,5 @@ module.exports = (app) => {
   app.use("/api/vehiculos", vehiculos);
   app.use("/api/reservaciones", reservaciones);
   app.use("/api/productos", productos);
+  app.use("/api/clientes", clientes);
 };
