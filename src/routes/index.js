@@ -29,4 +29,5 @@ module.exports = (app) => {
   app.use("/api/empleados", empleados);
   app.use("/api/vehiculos", vehiculos);
   app.use("/api/reservaciones", reservaciones);
+  app.use("/api/clientes", clientes);
 };
