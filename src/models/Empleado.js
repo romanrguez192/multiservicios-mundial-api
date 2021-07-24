@@ -3,8 +3,10 @@ const bcrypt = require("bcrypt");
 
 const login = async (usuario, contrasena) => {
   const query = `
-    SELECT *
-    FROM "Empleados"
+    SELECT "cedEmpleado", e."nombre", "apellido", "telefono", e."direccion", "sueldo", "usuario", "contrasena", "tipoEmpleado", s."rifSucursal", s."nombre" AS "nombreSucursal"
+    FROM "Empleados" AS e 
+    JOIN "Sucursales" AS s
+    ON e."rifSucursal" = s."rifSucursal"
     WHERE "usuario" = $1
   `;
 

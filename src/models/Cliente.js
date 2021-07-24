@@ -16,14 +16,14 @@ const findAll = async () => {
 const findBySucursal = async (rifSucursal) => {
   const query = `
     SELECT *
-    FROM "Clientes" 
+    FROM "ClientesSucursales" 
     WHERE "rifSucursal" = $1
   `;
 
-  const params = [cedCliente];
+  const params = [rifSucursal];
 
   const { rows } = await db.query(query, params);
-  return rows[0];
+  return rows;
 };
 
 // Buscar por cédula
@@ -101,5 +101,5 @@ const deleteCliente = async (cedCliente) => {
   await db.query(query, params);
 };
 
-module.exports = { findAll, findById, create, update };
+module.exports = { findAll, findBySucursal, findById, create, update };
 module.exports.delete = deleteCliente;

@@ -42,3 +42,29 @@ ON a."cedEmpleado" = e."cedEmpleado"
 JOIN "Servicios" AS s
 ON a."codServicio" = s."codServicio"
 WHERE "esCoordinador" = TRUE;
+
+CREATE VIEW "ClientesSucursales" AS
+SELECT DISTINCT c."cedCliente", c."nombre", c."email", c."tlfPrincipal", c."tlfAlternativo"
+FROM "Clientes" AS c, "Reservaciones" AS r, "SolicitudesServicio" AS s, "Facturas" as f
+WHERE c."cedCliente" = r."cedCliente"
+OR c."cedCliente" = s."cedCliente"
+OR c."cedCliente" = f."cedCliente";
+
+// TODO: OJO si creo una vista para las SS quizás se simplifique
+CREATE VIEW "ClientesSucursales" AS
+SELECT "rifSucursal", c."cedCliente", "nombre", "email", "tlfPrincipal", "tlfAlternativo"
+FROM "Clientes" AS c
+JOIN "Reservaciones" AS r
+ON c."cedCliente" = r."cedCliente"
+UNION
+SELECT "rifSucursal", c."cedCliente", "nombre", "email", "tlfPrincipal", "tlfAlternativo"
+FROM "Clientes" AS c
+JOIN "Vehiculos" AS v
+ON c."cedCliente" = v."cedCliente"
+JOIN "SolicitudesServicio" AS s
+ON v."codVehiculo" = s."codVehiculo"
+UNION
+SELECT "rifSucursal", c."cedCliente", "nombre", "email", "tlfPrincipal", "tlfAlternativo"
+FROM "Clientes" AS c
+JOIN "FacturasClientes" AS f
+ON c."cedCliente" = f."cedCliente";
