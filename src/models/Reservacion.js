@@ -15,6 +15,25 @@ const findAll = async (rifSucursal) => {
   return rows;
 };
 
+// Buscar todas las reservaciones del cliente
+const findByCliente = async (rifSucursal, cedCliente, fechaActividad) => {
+  const query = `
+    SELECT r.*, s.nombre AS "nombreServicio" 
+    FROM "Reservaciones" AS r
+    JOIN "Servicios" AS s
+    ON r."codServicio" = s."codServicio"
+    WHERE "rifSucursal" = $1
+    AND "cedCliente" = $2
+    AND "fechaActividad" :: DATE = $3 :: DATE
+  `;
+
+  const params = [rifSucursal, cedCliente, fechaActividad];
+
+  const { rows } = await db.query(query, params);
+
+  return rows;
+};
+
 // Buscar por nro de reserva
 const findById = async (nroReserva) => {
   const query = `
@@ -37,7 +56,7 @@ const create = async (reservacion) => {
     VALUES(NOW(), $1, $2, $3, $4, $5, 'pendiente')
     RETURNING *
   `;
-  
+
   const params = [
     reservacion.codServicio,
     reservacion.fechaActividad,
@@ -66,13 +85,13 @@ const update = async (nroReserva, reservacion) => {
   `;
 
   const params = [
-    reservacion.codServicio, 
-    reservacion.fechaActividad, 
-    reservacion.montoAbonado, 
-    reservacion.rifSucursal, 
-    reservacion.cedCliente, 
-    reservacion.status, 
-    nroReserva
+    reservacion.codServicio,
+    reservacion.fechaActividad,
+    reservacion.montoAbonado,
+    reservacion.rifSucursal,
+    reservacion.cedCliente,
+    reservacion.status,
+    nroReserva,
   ];
 
   const { rows } = await db.query(query, params);
@@ -92,5 +111,5 @@ const deleteReservacion = async (nroReserva) => {
   await db.query(query, params);
 };
 
-module.exports = { findAll, findById, create, update };
+module.exports = { findAll, findByCliente, findById, create, update };
 module.exports.delete = deleteReservacion;
