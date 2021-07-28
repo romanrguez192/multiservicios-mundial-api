@@ -5,6 +5,13 @@ const router = new Router();
 
 // Obtener todos
 router.get("/", async (req, res) => {
+  const cedCliente = parseInt(req.query.cedCliente);
+
+  if (cedCliente) {
+    const vehiculos = await Vehiculo.findByCliente(cedCliente);
+    return res.json(vehiculos);
+  }
+
   const vehiculos = await Vehiculo.findAll();
   res.json(vehiculos);
 });

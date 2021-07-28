@@ -3,11 +3,30 @@ const db = require("../db");
 // Buscar todos los vehiculos
 const findAll = async () => {
   const query = `
-    SELECT * 
-    FROM "Vehiculos"
+    SELECT DISTINCT v.*, c."nombre" AS "nombreCliente"
+    FROM "SolicitudesServicio" AS s
+    JOIN "Vehiculos" AS v
+    ON s."codVehiculo" = v."codVehiculo"
+    JOIN "Clientes" AS c
+    ON v."cedCliente" = c."cedCliente"
   `;
 
   const { rows } = await db.query(query);
+
+  return rows;
+};
+
+// Buscar todos los vehiculos del cliente
+const findByCliente = async (cedCliente) => {
+  const query = `
+    SELECT * 
+    FROM "Vehiculos"
+    WHERE "cedCliente" = $1
+  `;
+
+  const params = [cedCliente] 
+
+  const { rows } = await db.query(query, params);
 
   return rows;
 };
@@ -93,5 +112,5 @@ const deleteVehiculo = async (codVehiculo) => {
   await db.query(query, params);
 };
 
-module.exports = { findAll, findById, create, update };
+module.exports = { findAll, findByCliente, findById, create, update };
 module.exports.delete = deleteVehiculo;
