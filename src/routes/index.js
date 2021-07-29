@@ -15,6 +15,7 @@ const serviciosAsignados = require("./serviciosAsignados");
 const reservaciones = require("./reservaciones");
 const clientes = require("./clientes");
 const productos = require("./productos");
+const debeAplicarse = require("./debeAplicarse")
 
 module.exports = (app) => {
   app.use("/api/tiposVehiculos", tiposVehiculos);
@@ -34,4 +35,5 @@ module.exports = (app) => {
   app.use("/api/reservaciones", reservaciones);
   app.use("/api/productos", productos);
   app.use("/api/clientes", clientes);
+  app.use("/api/debeAplicarse", debeAplicarse);
 };
