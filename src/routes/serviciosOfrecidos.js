@@ -5,7 +5,15 @@ const router = new Router();
 
 // Obtener todos de una sucursal
 router.get("/:id", async (req, res) => {
-  const rifSucursal = parseInt(req.params.id);
+  const rifSucursal = req.params.id;
+
+  const sinReserva = req.query.sinReserva;
+
+  if (sinReserva) {
+    const serviciosOfrecidos = await ServicioOfrecido.findAllSinReserva(rifSucursal);
+    return res.json(serviciosOfrecidos);
+  }
+
   const serviciosOfrecidos = await ServicioOfrecido.findAll(rifSucursal);
   res.json(serviciosOfrecidos);
 });

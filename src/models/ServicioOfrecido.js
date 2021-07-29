@@ -15,6 +15,24 @@ const findAll = async (rifSucursal) => {
   return rows;
 };
 
+// Buscar todas las servicios de una sucursal
+const findAllSinReserva = async (rifSucursal) => {
+  const query = `
+    SELECT vs."codServicio", vs."nombreServicio"
+    FROM "VistaServiciosOfrecidos" AS vs
+    JOIN "Servicios" AS s
+    ON vs."codServicio" = s."codServicio"
+    WHERE vs."rifSucursal" = $1
+    AND s."minTiempoReserva" IS NULL
+  `;
+
+  const params = [rifSucursal];
+
+  const { rows } = await db.query(query, params);
+
+  return rows;
+};
+
 // Agregar un nuevo servicio a una sucursal
 const create = async (servicioOfrecido) => {
   const query = `
@@ -61,5 +79,5 @@ const deleteServicioOfrecido = async (codServicio, cedCoordinador) => {
   await db.query(query, params);
 };
 
-module.exports = { findAll, create, update };
+module.exports = { findAll, findAllSinReserva, create, update };
 module.exports.delete = deleteServicioOfrecido;
