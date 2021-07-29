@@ -100,9 +100,9 @@ const update = async (marca, modelo, codProductoServicio, debeAplicarse) => {
 const deleteDebeAplicarse = async (marca, modelo, codProductoServicio) => {
   const query = `
     DELETE FROM "DebeAplicarse"
-    WHERE marca = $6
-    AND modelo = $7
-    AND "codProductoServicio" = $8
+    WHERE marca = $1
+    AND modelo = $2
+    AND "codProductoServicio" = $3
   `;
 
   const params = [marca, modelo, codProductoServicio];
