@@ -3,10 +3,11 @@ const ordCompra = require("../models/OrdenCompra");
 
 const router = new Router();
 
-// Obtener todos
+// Obtener todos de una sucursal
 router.get("/", async (req, res) => {
-  const ordenCompra = await ordCompra.findAll();
-  res.json(ordenCompra);
+  const rifSucursal = req.query.rifSucursal;
+  const ordenesCompra = await ordCompra.findAll(rifSucursal);
+  res.json(ordenesCompra);
 });
 
 // Obtener uno
@@ -33,7 +34,7 @@ router.put("/:codOrdCompra", async (req, res) => {
 router.delete("/:codOrdCompra", async (req, res) => {
   const codigoOrdCompra = req.params.codOrdCompra;
   await ordCompra.delete(codigoOrdCompra);
-  res.json({ message: "Modelo eliminado" });
+  res.json({ message: "Orden de compra eliminada" });
 });
 
 module.exports = router;

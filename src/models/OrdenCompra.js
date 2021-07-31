@@ -15,11 +15,25 @@ const findAll = async (rifSucursal) => {
   return rows;
 };
 
+const findById = async (codOrdenCompra) => {
+  const query = `
+    SELECT * 
+    FROM "OrdenesCompra"
+    WHERE "codOrdCompra" = $1
+  `;
+
+  const params = [codOrdenCompra];
+
+  const { rows } = await db.query(query, params);
+
+  return rows[0];
+}
+
 // Crear nueva orden
 const create = async (orden) => {
   const query = `
     INSERT INTO "OrdenesCompra"
-    (fecha, rifProveedor, rifSucursal)
+    (fecha, "rifProveedor", "rifSucursal")
     VALUES($1, $2, $3)
     RETURNING *
   `;
@@ -30,6 +44,23 @@ const create = async (orden) => {
 
   return rows[0];
 };
+
+// Actualizar una orden 
+const update = async (codOrdenCompra, orden) => {
+  const query = `
+    UPDATE "OrdenesCompra"
+    SET fecha = $1,
+    "rifProveedor" = $2
+    WHERE "codOrdCompra" = $3
+    RETURNING *
+  `;
+  
+  const params = [orden.fecha, orden.rifProveedor, codOrdenCompra];
+
+  const { rows } = await db.query(query, params);
+
+  return rows[0];
+}
 
 // Eliminar una orden
 const deleteOrden= async (codOrden) => {
@@ -43,5 +74,5 @@ const deleteOrden= async (codOrden) => {
   await db.query(query, params);
 };
 
-module.exports = { findAll, create};
+module.exports = { findAll, create, findById, update};
 module.exports.delete = deleteOrden;
