@@ -3,7 +3,7 @@ const db = require("../db");
 // Buscar todas las sucursales
 const findAll = async () => {
   const query = `
-    SELECT 
+    SELECT *
     FROM "Sucursales"
   `;
 
@@ -30,7 +30,7 @@ const findById = async (rifSucursal) => {
 const create = async (sucursal) => {
   const query = `
     INSERT INTO "Sucursales"
-    ("rifSucursal", "nombre", "direccion", "ciudad", "cedEncargado", "fechaInvFisico")
+    ("rifSucursal", "nombre", "direccion", "ciudad", "fechaInvFisico", "fechaInicioEncargado")
     VALUES($1, $2, $3, $4, $5, $6) 
     RETURNING *
   `;
@@ -40,8 +40,8 @@ const create = async (sucursal) => {
     sucursal.nombre,
     sucursal.direccion,
     sucursal.ciudad,
-    sucursal.cedEncargado,
     sucursal.fechaInvFisico,
+    sucursal.fechaInicioEncargado,
   ];
 
   const { rows } = await db.query(query, params);
@@ -57,8 +57,8 @@ const update = async (rifSucursal, sucursal) => {
     "nombre" = $2,
     "direccion" = $3,
     "ciudad" = $4,
-    "cedEncargado = $5,
-    "fechaInvFisico = $6
+    "fechaInvFisico" = $5,
+    "fechaInicioEncargado" = $6
     WHERE "rifSucursal" = $7
   `;
 
@@ -67,8 +67,8 @@ const update = async (rifSucursal, sucursal) => {
     sucursal.nombre,
     sucursal.direccion,
     sucursal.ciudad,
-    sucursal.cedEncargado,
     sucursal.fechaInvFisico,
+    sucursal.fechaInicioEncargado,
     rifSucursal,
   ];
 

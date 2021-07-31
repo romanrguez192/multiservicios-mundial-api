@@ -11,7 +11,7 @@ router.get("/", async (req, res) => {
 
 //Obtener una
 router.get("/:id", async (req, res) => {
-  const rifSucursal = parseInt(req.params.id);
+  const rifSucursal = req.params.id;
   const sucursal = await Sucursal.findById(rifSucursal);
   res.json(sucursal);
 });
@@ -24,14 +24,14 @@ router.post("/", async (req, res) => {
 
 //Actualizar
 router.put("/:id", async (req, res) => {
-  const rifSucursal = parseInt(req.params.id);
+  const rifSucursal = req.params.id;
   const sucursal = await Sucursal.update(rifSucursal, req.body);
   res.json(sucursal);
 });
 
 // Borrar
 router.delete("/:id", async (req, res) => {
-  const rifSucursal = parseInt(req.params.id);
+  const rifSucursal = req.params.id;
   await Sucursal.delete(rifSucursal);
   res.json({ message: "Sucursal" });
 });
