@@ -24,7 +24,7 @@ const create = async (orden) => {
     RETURNING *
   `;
   
-  const params = [orden.feha, orden.rifProveedor, orden.rifSucursal];
+  const params = [orden.fecha, orden.rifProveedor, orden.rifSucursal];
 
   const { rows } = await db.query(query, params);
 
