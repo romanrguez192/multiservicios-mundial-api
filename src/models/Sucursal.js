@@ -60,6 +60,7 @@ const update = async (rifSucursal, sucursal) => {
     "fechaInvFisico" = $5,
     "fechaInicioEncargado" = $6
     WHERE "rifSucursal" = $7
+    RETURNING *
   `;
 
   const params = [
