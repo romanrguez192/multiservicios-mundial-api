@@ -4,12 +4,18 @@ const db = require("../db");
 const fixTiempoUso = (rows) => {
   rows.forEach((r) => {
     if (r.tiempoUso) {
-      const d = r.tiempoUso.days;
-      d <= 21
-        ? (r.tiempoUso = d + " day" + (d > 1 ? "s" : ""))
-        : (r.tiempoUso = "1 month");
+      const y = r.tiempoUso.years;
+      const m = r.tiempoUso.months;
+      if(m){
+        r.tiempoUso = m + " months"
+      }else{
+        y > 1
+          ? (r.tiempoUso = y + " years")
+          : (r.tiempoUso = y + " year")
+      }
     }
   });
+  
 };
 
 const findAll = async (marca, modelo) => {
@@ -25,7 +31,7 @@ const findAll = async (marca, modelo) => {
   const { rows } = await db.query(query, params);
 
   fixTiempoUso(rows);
-
+  console.log(rows)
   return rows;
 };
 
