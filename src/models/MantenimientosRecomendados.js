@@ -5,10 +5,9 @@ const fixTiempoUso = (rows) => {
   rows.forEach((r) => {
     if (r.tiempoUso) {
       const d = r.tiempoUso.days;
-      (d <= 21) ? 
-      r.tiempoUso = d + " day" + (d > 1 ? "s" : "")
-      :
-      r.tiempoUso = "1 month"
+      d <= 21
+        ? (r.tiempoUso = d + " day" + (d > 1 ? "s" : ""))
+        : (r.tiempoUso = "1 month");
     }
   });
 };
@@ -21,11 +20,11 @@ const findAll = async (marca, modelo) => {
     AND modelo = $2
   `;
 
-  const params = [marca, modelo]
+  const params = [marca, modelo];
 
   const { rows } = await db.query(query, params);
 
-  fixTiempoUso(rows)
+  fixTiempoUso(rows);
 
   return rows;
 };
@@ -47,7 +46,7 @@ const findById = async (mantenimiento) => {
     mantenimiento.modelo,
     mantenimiento.tiempoUso,
     mantenimiento.kilometraje,
-    mantenimiento.mantenimiento
+    mantenimiento.mantenimiento,
   ];
 
   const { rows } = await db.query(query, params);
@@ -71,7 +70,7 @@ const create = async (mantenimiento) => {
     mantenimiento.modelo,
     mantenimiento.tiempoUso,
     mantenimiento.kilometraje,
-    mantenimiento.mantenimiento
+    mantenimiento.mantenimiento,
   ];
 
   const { rows } = await db.query(query, params);
@@ -108,7 +107,7 @@ const update = async (oldMantenimiento, newMantenimiento) => {
     oldMantenimiento.modelo,
     oldMantenimiento.tiempoUso,
     oldMantenimiento.kilometraje,
-    oldMantenimiento.mantenimiento
+    oldMantenimiento.mantenimiento,
   ];
 
   const { rows } = await db.query(query, params);
@@ -134,7 +133,7 @@ const deleteMantenimiento = async (mantenimiento) => {
     mantenimiento.modelo,
     mantenimiento.tiempoUso,
     mantenimiento.kilometraje,
-    mantenimiento.mantenimiento
+    mantenimiento.mantenimiento,
   ];
 
   await db.query(query, params);

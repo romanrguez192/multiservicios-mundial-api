@@ -8,7 +8,7 @@ const findAll = async (codVehiculo) => {
     WHERE "codVehiculo" = $1
   `;
 
-  const params = [codVehiculo]
+  const params = [codVehiculo];
 
   const { rows } = await db.query(query, params);
 
@@ -38,11 +38,11 @@ const create = async (mantenimiento) => {
     VALUES($1, $2, $3)
     RETURNING *
   `;
-  
+
   const params = [
     mantenimiento.codVehiculo,
     mantenimiento.fechaMant,
-    mantenimiento.descripcion
+    mantenimiento.descripcion,
   ];
 
   const { rows } = await db.query(query, params);
@@ -67,7 +67,7 @@ const update = async (codVehiculo, fechaMant, mantenimiento) => {
     mantenimiento.fechaMant,
     mantenimiento.descripcion,
     codVehiculo,
-    fechaMant
+    fechaMant,
   ];
 
   const { rows } = await db.query(query, params);
@@ -84,7 +84,6 @@ const deleteMantenimiento = async (codVehiculo, fechaMant) => {
   `;
 
   const params = [codVehiculo, fechaMant];
-
 
   await db.query(query, params);
 };
