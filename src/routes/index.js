@@ -18,6 +18,7 @@ const productos = require("./productos");
 const debeAplicarse = require("./debeAplicarse");
 const MantenimientosPrevios = require("./mantenimientosPrevios");
 const MantenimientosRecomendados = require("./mantenimientosRecomendados");
+const OrdenesCompra = require("./ordenesCompra");
 
 module.exports = (app) => {
   app.use("/api/tiposVehiculos", tiposVehiculos);
@@ -40,4 +41,5 @@ module.exports = (app) => {
   app.use("/api/debeAplicarse", debeAplicarse);
   app.use("/api/mantenimientosPrevios", MantenimientosPrevios);
   app.use("/api/mantenimientosRecomendados", MantenimientosRecomendados);
+  app.use("/api/ordenesCompra", OrdenesCompra);
 };
