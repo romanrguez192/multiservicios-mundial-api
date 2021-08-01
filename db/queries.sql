@@ -69,8 +69,6 @@ FROM "Clientes" AS c
 JOIN "FacturasClientes" AS f
 ON c."cedCliente" = f."cedCliente";
 
--- QUERIES DE ESTADÍSTICAS
-
 -- Clientes frecuentes
 CREATE VIEW "ClientesFrecuentes" AS
 SELECT c."rifSucursal", c."cedCliente", c."nombre", COUNT(*) / 4 AS "promedio",
@@ -88,6 +86,21 @@ WHERE s."rifSucursal" = c."rifSucursal"
 AND NOW() - s."fechaEntrada" < '4 months'
 GROUP BY c."rifSucursal", c."cedCliente", c."nombre"
 HAVING COUNT(*) / 4 >= 1;
+
+-- QUERIES DE ESTADÍSTICAS
+-- TODO: Probarlas bien con más datos
+
+-- Clientes más/menos frecuentes (servicios)
+-- TODO: Queda pendiente
+SELECT c."cedCliente", c."nombre", COUNT() AS "totalVeces"
+FROM "ClientesSucursales" AS c
+JOIN "Vehiculos" AS v
+ON c."cedCliente" = v."cedCliente"
+JOIN "SolicitudesServicio" AS s
+ON s."codVehiculo" = v."codVehiculo"
+WHERE s."rifSucursal" = c."rifSucursal"
+AND NOW() - s."fechaEntrada" < '4 months'
+GROUP BY c."rifSucursal", c."cedCliente", c."nombre"
 
 -- Clientes que no usan los servicios tras reservar
 SELECT DISTINCT c."cedCliente", c."nombre", COUNT(*) AS "totalVeces"
@@ -110,11 +123,25 @@ ON ss."codVehiculo" = v."codVehiculo"
 WHERE ss."rifSucursal" = $1
 GROUP BY s."codServicio", s."nombre", v."marca";
 
--- Personal que realiza más servicios por mes
+-- Personal que realiza más/menos servicios por mes
 -- TODO: El mes
 SELECT e."cedEmpleado", CONCAT(e."nombre", ' ', e."apellido") AS "nombreEmpleado", COUNT(DISTINCT os."nroSolicitud") AS "totalServicios"
 FROM "Empleados" AS e
-JOIN "OrdenesServicio" AS os
+LEFT JOIN "OrdenesServicio" AS os
 ON e."cedEmpleado" = os."cedEmpleado"
 WHERE e."rifSucursal" = '799072750'
 GROUP BY e."cedEmpleado", e."nombre";
+
+-- Producto con más/menos ventas
+-- TODO: Pensarlo otra vez pero respecto a los productos que venda la sucursal
+SELECT p."codProducto", p."nombre", COUNT(DISTINCT df."nroFacturaVenta") AS "totalVentas"
+FROM "VistaProductosVentas" AS p
+LEFT JOIN "DetallesFacturasVentas" AS df
+ON p."codProducto" = df."codProductoVenta"
+LEFT JOIN "FacturasVentas" AS fv
+ON df."nroFacturaVenta" = fv."nroFactura"
+LEFT JOIN "FacturasClientes" AS fc
+ON fv."nroFactura" = fc."nroFactura"
+AND fc."rifSucursal" = '799072750'
+GROUP BY p."codProducto", p."nombre";
+
