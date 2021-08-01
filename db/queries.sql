@@ -133,7 +133,7 @@ WHERE e."rifSucursal" = '799072750'
 GROUP BY e."cedEmpleado", e."nombre";
 
 -- Producto con más/menos ventas
--- TODO: Pensarlo otra vez pero respecto a los productos que venda la sucursal
+-- TODO: Pensarlo otra vez pero respecto a los productos que venda la sucursal y si incluir el ingreso
 SELECT p."codProducto", p."nombre", COUNT(DISTINCT df."nroFacturaVenta") AS "totalVentas"
 FROM "VistaProductosVentas" AS p
 LEFT JOIN "DetallesFacturasVentas" AS df
@@ -144,4 +144,25 @@ LEFT JOIN "FacturasClientes" AS fc
 ON fv."nroFactura" = fc."nroFactura"
 AND fc."rifSucursal" = '799072750'
 GROUP BY p."codProducto", p."nombre";
+
+-- Servicios más/menos solicitados
+SELECT s."codServicio", s."nombreServicio", COUNT(DISTINCT ds."nroSolicitud") AS "totalVeces"
+FROM "VistaServiciosOfrecidos" AS s
+LEFT JOIN "DetallesSolicitudes" AS ds
+ON s."codServicio" = ds."codServicio"
+WHERE s."rifSucursal" = '799072750'
+GROUP BY s."codServicio", s."nombreServicio";
+
+-- Proveedor que suministra más/menos productos
+-- TODO: Pensar si es solo por tipo de producto o si cuenta la cantidad en sí
+-- ¿O será solo los "productos que distribuye"?
+SELECT prov."rifProveedor", prov."razonSocial", COUNT(pide."codProducto") AS "totalProductos", COALESCE(SUM(pide."cantidad"), 0) AS "cantidadTotal"
+FROM "Proveedores" AS prov
+LEFT JOIN "OrdenesCompra" AS oc
+ON prov."rifProveedor" = oc."rifProveedor"
+AND oc."rifSucursal" = '799072750'
+LEFT JOIN "Pide" AS pide
+ON oc."codOrdCompra" = pide."codOrdCompra"
+AND pide."precio" IS NOT NULL
+GROUP BY prov."rifProveedor", prov."razonSocial";
 
