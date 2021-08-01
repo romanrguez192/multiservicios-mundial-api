@@ -3,19 +3,15 @@ const db = require("../db");
 // Buscar todos los Mantenimientos Recomendados por marca y modelo
 const fixTiempoUso = (rows) => {
   rows.forEach((r) => {
-    if (r.tiempoUso) {
-      const y = r.tiempoUso.years;
-      const m = r.tiempoUso.months;
-      if(m){
-        r.tiempoUso = m + " months"
-      }else{
-        y > 1
-          ? (r.tiempoUso = y + " years")
-          : (r.tiempoUso = y + " year")
-      }
+    const y = r.tiempoUso.years;
+    const m = r.tiempoUso.months;
+
+    if (m) {
+      m > 1 ? (r.tiempoUso = m + " months") : (r.tiempoUso = m + " month");
+    } else {
+      y > 1 ? (r.tiempoUso = y + " years") : (r.tiempoUso = y + " year");
     }
   });
-  
 };
 
 const findAll = async (marca, modelo) => {
@@ -31,7 +27,7 @@ const findAll = async (marca, modelo) => {
   const { rows } = await db.query(query, params);
 
   fixTiempoUso(rows);
-  console.log(rows)
+  console.log(rows);
   return rows;
 };
 
