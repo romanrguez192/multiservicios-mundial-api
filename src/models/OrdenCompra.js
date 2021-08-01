@@ -27,25 +27,25 @@ const findById = async (codOrdenCompra) => {
   const { rows } = await db.query(query, params);
 
   return rows[0];
-}
+};
 
 // Crear nueva orden
 const create = async (orden) => {
   const query = `
     INSERT INTO "OrdenesCompra"
-    (fecha, "rifProveedor", "rifSucursal")
-    VALUES($1, $2, $3)
+    ("fecha", "rifProveedor", "rifSucursal")
+    VALUES(NOW(), $1, $2)
     RETURNING *
   `;
-  
-  const params = [orden.fecha, orden.rifProveedor, orden.rifSucursal];
+
+  const params = [orden.rifProveedor, orden.rifSucursal];
 
   const { rows } = await db.query(query, params);
 
   return rows[0];
 };
 
-// Actualizar una orden 
+// Actualizar una orden
 const update = async (codOrdenCompra, orden) => {
   const query = `
     UPDATE "OrdenesCompra"
@@ -54,16 +54,16 @@ const update = async (codOrdenCompra, orden) => {
     WHERE "codOrdCompra" = $3
     RETURNING *
   `;
-  
+
   const params = [orden.fecha, orden.rifProveedor, codOrdenCompra];
 
   const { rows } = await db.query(query, params);
 
   return rows[0];
-}
+};
 
 // Eliminar una orden
-const deleteOrden= async (codOrden) => {
+const deleteOrden = async (codOrden) => {
   const query = `
     DELETE FROM "OrdenesCompra"
     WHERE "codOrdCompra" = $1
@@ -74,5 +74,5 @@ const deleteOrden= async (codOrden) => {
   await db.query(query, params);
 };
 
-module.exports = { findAll, create, findById, update};
+module.exports = { findAll, create, findById, update };
 module.exports.delete = deleteOrden;
