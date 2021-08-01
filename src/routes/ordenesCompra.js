@@ -10,11 +10,11 @@ router.get("/", async (req, res) => {
   res.json(ordenesCompra);
 });
 
-// Obtener uno
-router.get("/:codOrdCompra", async (req, res) => {
+// Obtener productos
+router.get("/:codOrdCompra/productos", async (req, res) => {
   const codigoOrdCompra = req.params.codOrdCompra;
-  const ordenCompra = await ordCompra.findById(codigoOrdCompra);
-  res.json(ordenCompra);
+  const productos = await ordCompra.findProductos(codigoOrdCompra);
+  res.json(productos);
 });
 
 // Crear uno
