@@ -21,6 +21,7 @@ const MantenimientosRecomendados = require("./mantenimientosRecomendados");
 const OrdenesCompra = require("./ordenesCompra");
 const solicitudesServicio = require("./solicitudesDeServicio");
 const detallesSolicitudes = require("./detallesSolicitudes");
+const actividades = require("./actividades");
 
 module.exports = (app) => {
   app.use("/api/tiposVehiculos", tiposVehiculos);
@@ -46,4 +47,5 @@ module.exports = (app) => {
   app.use("/api/ordenesCompra", OrdenesCompra);
   app.use("/api/solicitudesServicio", solicitudesServicio);
   app.use("/api/detallesSolicitudes", detallesSolicitudes);
+  app.use("/api/actividades", actividades);
 };
