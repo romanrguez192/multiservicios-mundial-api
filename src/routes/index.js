@@ -49,5 +49,5 @@ module.exports = (app) => {
   app.use("/api/solicitudesServicio", solicitudesServicio);
   app.use("/api/detallesSolicitudes", detallesSolicitudes);
   app.use("/api/ordenesServicio", ordenServicio);
-  app.use("/api/estadisticas/:id", estadisticas);
+  app.use("/api/estadisticas", estadisticas);
 };
