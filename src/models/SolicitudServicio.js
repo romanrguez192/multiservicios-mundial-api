@@ -111,7 +111,7 @@ const create = async (solicitud) => {
               SET "nroSolicitud" = $1,
               "status" = 'atendida'
               WHERE "nroReserva" = $2
-           `;
+            `;
 
             const params2 = [fichaRegistro.nroSolicitud, r.nroReserva];
 
@@ -139,7 +139,7 @@ const create = async (solicitud) => {
             ("nroSolicitud", "codServicio", "nroActividad", monto)
             SELECT $1, $2, "nroActividad", "precio"
             FROM "Actividades"
-            WHERE "codServicio" = $2;
+            WHERE "codServicio" = $3;
           `;
 
           const params3 = [fichaRegistro.nroSolicitud, s];
