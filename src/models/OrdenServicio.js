@@ -51,11 +51,11 @@ const create = async (orden) => {
       "cedEmpleado" = $6,
       "cantidad" = $7,
       "unidadMedida" = $8
-      WHERE "nroSolicitud" = $5
-      AND "codServicio" = $6
-      AND "nroActividad" = $7
-      AND "codProducto" = $8
-      AND "fecha" = $9
+      WHERE "nroSolicitud" = $9
+      AND "codServicio" = $10
+      AND "nroActividad" = $11
+      AND "codProducto" = $12
+      AND "fecha" = $13
       RETURNING *
     `;
   
