@@ -142,7 +142,7 @@ LEFT JOIN "FacturasVentas" AS fv
 ON df."nroFacturaVenta" = fv."nroFactura"
 LEFT JOIN "FacturasClientes" AS fc
 ON fv."nroFactura" = fc."nroFactura"
-AND fc."rifSucursal" = '799072750'
+AND fc."rifSucursal" = $1
 GROUP BY p."codProducto", p."nombre";
 
 -- Servicios más/menos solicitados
@@ -150,7 +150,7 @@ SELECT s."codServicio", s."nombreServicio", COUNT(DISTINCT ds."nroSolicitud") AS
 FROM "VistaServiciosOfrecidos" AS s
 LEFT JOIN "DetallesSolicitudes" AS ds
 ON s."codServicio" = ds."codServicio"
-WHERE s."rifSucursal" = '799072750'
+WHERE s."rifSucursal" = $1
 GROUP BY s."codServicio", s."nombreServicio";
 
 -- Proveedor que suministra más/menos productos
@@ -160,7 +160,7 @@ SELECT prov."rifProveedor", prov."razonSocial", COUNT(pide."codProducto") AS "to
 FROM "Proveedores" AS prov
 LEFT JOIN "OrdenesCompra" AS oc
 ON prov."rifProveedor" = oc."rifProveedor"
-AND oc."rifSucursal" = '799072750'
+AND oc."rifSucursal" = $1
 LEFT JOIN "Pide" AS pide
 ON oc."codOrdCompra" = pide."codOrdCompra"
 AND pide."precio" IS NOT NULL
