@@ -17,7 +17,7 @@ const findAll = async (rifSucursal) => {
 // Buscar por número
 const findById = async (nroSolicitud) => {
   const query = `
-    SELECT ss.*, v."placa" AS "placa", v."marca", v."modelo", c."cedCliente", c."nombre" AS "nombreCliente"
+    SELECT ss.*, ss."fechaSalidaReal" IS NOT NULL AS "finalizada", v."placa" AS "placa", v."marca", v."modelo", c."cedCliente", c."nombre" AS "nombreCliente"
     FROM "SolicitudesServicio" AS ss
     JOIN "Vehiculos" AS v
     ON ss."codVehiculo" = v."codVehiculo"
