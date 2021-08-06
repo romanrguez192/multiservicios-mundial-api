@@ -1,8 +1,8 @@
 //Estadisticas de las marcas mas atendidas por servicio
 const db = require("../db");
 
-const marcasMasAtendidas = async (rifSucursal) => {
-    const query = `
+const marcasAtendidas = async (rifSucursal) => {
+  const query = `
     SELECT s."codServicio", s."nombre", v."marca", COUNT(DISTINCT ss."nroSolicitud") AS "totalVeces"
     FROM "Servicios" AS s
     JOIN "DetallesSolicitudes" AS ds
@@ -22,4 +22,4 @@ const marcasMasAtendidas = async (rifSucursal) => {
   return rows;
 };
 
-module.exports = { marcasMasAtendidas };
+module.exports = { marcasAtendidas };

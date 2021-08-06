@@ -1,7 +1,7 @@
 //Proveedor que suministra más/menos productos
 const db = require("../db");
 
-const proveedorSuministraMasMenosProductos = async (rifSucursal) => {
+const proveedorProductos = async (rifSucursal) => {
   const query = `
     SELECT prov."rifProveedor", prov."razonSocial", COUNT(pide."codProducto") AS "totalProductos", COALESCE(SUM(pide."cantidad"), 0) AS "cantidadTotal"
     FROM "Proveedores" AS prov
@@ -21,4 +21,4 @@ const proveedorSuministraMasMenosProductos = async (rifSucursal) => {
   return rows;
 };
 
-module.exports = { proveedorSuministraMasMenosProductos };
+module.exports = { proveedorProductos };

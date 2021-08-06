@@ -1,7 +1,7 @@
 //Producto con más/menos ventas
 const db = require("../db");
 
-const productosMasMenosVendidos = async (rifSucursal) => {
+const productosVendidos = async (rifSucursal) => {
   const query = `
     SELECT p."codProducto", p."nombre", COUNT(DISTINCT df."nroFacturaVenta") AS "totalVentas"
     FROM "VistaProductosVentas" AS p
@@ -22,4 +22,4 @@ const productosMasMenosVendidos = async (rifSucursal) => {
   return rows;
 };
 
-module.exports = { productosMasMenosVendidos };
+module.exports = { productosVendidos };

@@ -1,13 +1,13 @@
 //Estadisticas del personal que realiza mas/menos servicios al mes
 const db = require("../db");
 
-const personalQueRealizaServicios = async (rifSucursal) => {
-    const query = `
+const personalServicios = async (rifSucursal) => {
+  const query = `
     SELECT e."cedEmpleado", CONCAT(e."nombre", ' ', e."apellido") AS "nombreEmpleado", COUNT(DISTINCT os."nroSolicitud") AS "totalServicios"
     FROM "Empleados" AS e
     LEFT JOIN "OrdenesServicio" AS os
     ON e."cedEmpleado" = os."cedEmpleado"
-    WHERE e."rifSucursal" = '799072750'
+    WHERE e."rifSucursal" = $1
     GROUP BY e."cedEmpleado", e."nombre";
   `;
 
@@ -18,4 +18,4 @@ const personalQueRealizaServicios = async (rifSucursal) => {
   return rows;
 };
 
-module.exports = { personalQueRealizaServicios };
+module.exports = { personalServicios };

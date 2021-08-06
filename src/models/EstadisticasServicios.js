@@ -1,7 +1,7 @@
 // Servicios más/menos solicitados
 const db = require("../db");
 
-const serviciosMasMenosSolicitados = async (rifSucursal) => {
+const serviciosSolicitados = async (rifSucursal) => {
   const query = `
     SELECT s."codServicio", s."nombreServicio", COUNT(DISTINCT ds."nroSolicitud") AS "totalVeces"
     FROM "VistaServiciosOfrecidos" AS s
@@ -18,4 +18,4 @@ const serviciosMasMenosSolicitados = async (rifSucursal) => {
   return rows;
 };
 
-module.exports = { serviciosMasMenosSolicitados };
+module.exports = { serviciosSolicitados };
