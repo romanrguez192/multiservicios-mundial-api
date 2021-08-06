@@ -11,12 +11,12 @@ router.get("/sucursal/:id", async(req, res) => {
 })
 
 // Busca una factura por su numero
-router.get("/:id", async(req, res) => {
+router.get("/productos/:id", async(req, res) => {
   const nroFactura = parseInt(req.params.id);
   const factura = await FacturaVentas.findById(nroFactura);
   res.json(factura);
 })
-
+// 4050000
 // Crea una factura
 router.post("/", async(req, res) => {
   const factura = await FacturaVentas.create(req.body);
