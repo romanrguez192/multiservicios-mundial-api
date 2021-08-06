@@ -3,23 +3,23 @@ const SolicitudServicio = require("../models/SolicitudServicio");
 
 const router = new Router();
 
-// Obtener todas
-router.get("/", async (req, res) => {
-  const solicitudes = await SolicitudServicio.findAll();
-  res.json(solicitudes);
-});
-
 // Obtener todas de una sucursal
 router.get("/:rifSucursal", async (req, res) => {
   const rifSucursal = req.params.rifSucursal;
-  const solicitudes = await SolicitudServicio.findById(rifSucursal);
+  const solicitudes = await SolicitudServicio.findAll(rifSucursal);
+  res.json(solicitudes);
+});
+
+// Obtener una
+router.get("/:nroSolicitud", async (req, res) => {
+  const nroSolicitud = req.params.nroSolicitud;
+  const solicitudes = await SolicitudServicio.findById(nroSolicitud);
   res.json(solicitudes);
 });
 
 // Crear una solicitud
-router.post("/:rifSucursal", async (req, res) => {
-  const rifSucursal = req.params.rifSucursal;
-  const solicitud = await SolicitudServicio.create(rifSucursal, req.body);
+router.post("/", async (req, res) => {
+  const solicitud = await SolicitudServicio.create(req.body);
   res.status(201).json(solicitud);
 });
 

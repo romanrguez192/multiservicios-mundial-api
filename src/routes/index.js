@@ -19,9 +19,8 @@ const debeAplicarse = require("./debeAplicarse");
 const MantenimientosPrevios = require("./mantenimientosPrevios");
 const MantenimientosRecomendados = require("./mantenimientosRecomendados");
 const OrdenesCompra = require("./ordenesCompra");
-const solicitudesServicio = require("./solicitudesDeServicio");
+const solicitudesServicio = require("./solicitudesServicio");
 const detallesSolicitudes = require("./detallesSolicitudes");
-const crearSolicitud = require("./crearSolicitudes");
 
 module.exports = (app) => {
   app.use("/api/tiposVehiculos", tiposVehiculos);
@@ -47,5 +46,4 @@ module.exports = (app) => {
   app.use("/api/ordenesCompra", OrdenesCompra);
   app.use("/api/solicitudesServicio", solicitudesServicio);
   app.use("/api/detallesSolicitudes", detallesSolicitudes);
-  app.use("/api/crearSolicitud", crearSolicitud);
 };
