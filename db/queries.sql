@@ -92,7 +92,7 @@ HAVING COUNT(*) / 4 >= 1;
 
 -- Clientes más/menos frecuentes (servicios)
 -- TODO: Queda pendiente
-SELECT c."cedCliente", c."nombre", COUNT() AS "totalVeces"
+SELECT c."cedCliente", c."nombre", COUNT(*) AS "totalVeces"
 FROM "ClientesSucursales" AS c
 JOIN "Vehiculos" AS v
 ON c."cedCliente" = v."cedCliente"
