@@ -1,15 +1,20 @@
 const db = require("../db");
 
-
-// Buscar todas las ordenes de una solicitud
-const findAll = async (nroSolicitud) => {
+// Buscar todas las ordenes de una solicitud, servicio, actividad
+const findAll = async (nroSolicitud, codServicio, nroActividad) => {
   const query = `
-    SELECT * 
-    FROM "OrdenesServicio"
-    WHERE "nroSolicitud" = $1
+    SELECT os.*, p."nombre", e."nombre"
+    FROM "OrdenesServicio" AS os
+    JOIN "Productos" AS p
+    ON os."codProducto" = p."codProducto"
+    JOIN "Empleados" AS e
+    ON e."cedEmpleado" = os."cedEmpleado"
+    WHERE os."nroSolicitud" = $1
+    AND os."codServicio" = $2
+    AND os."nroActividad" = $3
   `;
 
-  const params = [nroSolicitud];
+  const params = [nroSolicitud, codServicio, nroActividad];
 
   const { rows } = await db.query(query, params);
   return rows;
@@ -19,12 +24,13 @@ const findAll = async (nroSolicitud) => {
 const create = async (orden) => {
     const query = `
       INSERT INTO "OrdenesServicio"
-      ("codServicio", "nroActividad", "codProducto", "fecha", "cedEmpleado", "cantidad", "unidadMedida")
-      VALUES($1, $2, $3, NOW(), $4, $5, $6)
+      ("nroSolicitud", "codServicio", "nroActividad", "codProducto", "fecha", "cedEmpleado", "cantidad", "unidadMedida")
+      VALUES($1, $2, $3, $4, $5, $6, $7, $8)
       RETURNING *
     `;
   
     const params = [
+      orden.nroSolicitud,
       orden.codServicio,
       orden.nroActividad,
       orden.codProducto,
