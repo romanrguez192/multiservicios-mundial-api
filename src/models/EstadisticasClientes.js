@@ -4,7 +4,7 @@ const db = require("../db");
 // TODO: Queda pendiente
 const masMenosFrecuencia = async (rifSucursal) => {
   const query = `
-    SELECT c."cedCliente", c."nombre", COUNT() AS "totalVeces"
+    SELECT c."cedCliente", c."nombre", COUNT(*) AS "totalVeces"
     FROM "ClientesSucursales" AS c
     JOIN "Vehiculos" AS v
     ON c."cedCliente" = v."cedCliente"
@@ -16,8 +16,9 @@ const masMenosFrecuencia = async (rifSucursal) => {
   `;
 
   const params = [rifSucursal];
-
-  const { rows } = await db.query(query);
+  console.log(params);
+  console.log(query);
+  const { rows } = await db.query(query, params);
 
   return rows;
 }
