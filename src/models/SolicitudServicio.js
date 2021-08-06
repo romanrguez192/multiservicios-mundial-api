@@ -3,7 +3,7 @@ const db = require("../db");
 // Buscar por rif de sucursal
 const findAll = async (rifSucursal) => {
   const query = `
-    SELECT *
+    SELECT *, "fechaSalidaReal" IS NOT NULL AS "finalizada"
     FROM "SolicitudesServicio" 
     WHERE "rifSucursal" = $1
   `;
