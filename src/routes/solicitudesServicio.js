@@ -1,5 +1,6 @@
 const Router = require("express-promise-router");
 const SolicitudServicio = require("../models/SolicitudServicio");
+const OrdenCompra = require("../models/OrdenCompra");
 
 const router = new Router();
 
@@ -28,8 +29,17 @@ router.get("/:nroSolicitud/servicios", async (req, res) => {
 router.get("/:nroSolicitud/servicios/:codServicio", async (req, res) => {
   const nroSolicitud = req.params.nroSolicitud;
   const codServicio = req.params.codServicio;
-  const detalles = await SolicitudServicio.findDetalles(nroSolicitud);
+  const detalles = await SolicitudServicio.findDetalles(nroSolicitud, codServicio);
   res.json(detalles);
+});
+
+// Obtener ordenes
+router.get("/:nroSolicitud/servicios/:codServicio/actividades/:nroActividad/ordenes", async (req, res) => {
+  const nroSolicitud = req.params.nroSolicitud;
+  const codServicio = req.params.codServicio;
+  const nroActividad = req.params.nroActividad;
+  const ordenes = await OrdenCompra.findAll(nroSolicitud, codServicio, nroActividad);
+  res.json(ordenes);
 });
 
 // Crear una solicitud

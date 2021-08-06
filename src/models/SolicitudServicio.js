@@ -50,17 +50,24 @@ const findServicios = async (nroSolicitud) => {
 };
 
 // Obtener sus detalles
-const findDetalles = async (nroSolicitud) => {
+const findDetalles = async (nroSolicitud, codServicio) => {
   const query = `
-    SELECT *
-    FROM "Servicios"
-    WHERE "codServicio" IN (
-        SELECT "codServicio"
-        FROM "DetallesSolicitudes"
-        WHERE "nroSolicitud" = $1)
+    SELECT ds.*, a."descripcion",
+    EXISTS(SELECT *
+        FROM "OrdenesServicio" AS os
+        WHERE os."nroSolicitud" = ds."nroSolicitud"
+        AND os."codServicio" = ds."codServicio"
+        AND os."nroActividad" = ds."nroActividad"
+        ) AS "ejecutada"
+    FROM "DetallesSolicitudes" AS ds
+    JOIN "Actividades" AS a
+    ON ds."codServicio" = a."codServicio"
+    AND ds."nroActividad" = a."nroActividad"
+    WHERE ds."nroSolicitud" = $1
+    AND ds."codServicio" = $2
   `;
 
-  const params = [nroSolicitud];
+  const params = [nroSolicitud, codServicio];
 
   const { rows } = await db.query(query, params);
   return rows;
