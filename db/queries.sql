@@ -129,7 +129,7 @@ SELECT e."cedEmpleado", CONCAT(e."nombre", ' ', e."apellido") AS "nombreEmpleado
 FROM "Empleados" AS e
 LEFT JOIN "OrdenesServicio" AS os
 ON e."cedEmpleado" = os."cedEmpleado"
-WHERE e."rifSucursal" = '799072750'
+WHERE e."rifSucursal" = $1
 GROUP BY e."cedEmpleado", e."nombre";
 
 -- Producto con más/menos ventas
