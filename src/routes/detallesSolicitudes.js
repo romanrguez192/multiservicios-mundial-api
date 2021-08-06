@@ -23,7 +23,7 @@ router.post("/", async (req, res) => {
 });
 
 // Actualizar un detalle
-router.post("/:nroSolicitud/:codServicio/:nroActividad", async (req, res) => {
+router.put("/:nroSolicitud/:codServicio/:nroActividad", async (req, res) => {
   const nroSolicitud = parseInt(req.params.nroSolicitud);
   const codServicio = parseInt(req.params.codServicio);
   const nroActividad = parseInt(req.params.nroActividad);

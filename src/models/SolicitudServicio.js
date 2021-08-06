@@ -31,12 +31,11 @@ const create = async (rifSucursal, solicitud) => {
   const query = `
     INSERT INTO "SolicitudesServicio"
     ("fechaEntrada", "fechaSalidaEstimada", "fechaSalidaReal", "codVehiculo", "rifSucursal", autorizado)
-    VALUES($1, $2, $3, $4, $5, $6)
+    VALUES(NOW(), $1, $2, $3, $4, $5)
     RETURNING *
   `;
   
   const params = [
-    solicitud.fechaEntrada, 
     solicitud.fechaSalidaEstimada,
     solicitud.fechaSalidaReal,
     solicitud.codVehiculo,
