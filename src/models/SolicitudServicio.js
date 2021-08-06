@@ -17,8 +17,12 @@ const findAll = async (rifSucursal) => {
 // Buscar por número
 const findById = async (nroSolicitud) => {
   const query = `
-    SELECT *
-    FROM "SolicitudesServicio" 
+    SELECT ss.*, v."placa" AS "placa", v."marca", v."modelo", c."cedCliente", c."nombre" AS "nombreCliente"
+    FROM "SolicitudesServicio" AS ss
+    JOIN "Vehiculos" AS v
+    ON ss."codVehiculo" = v."codVehiculo"
+    JOIN "Clientes" AS c
+    ON v."cedCliente" = c."cedCliente"
     WHERE "nroSolicitud" = $1
   `;
 
@@ -28,12 +32,54 @@ const findById = async (nroSolicitud) => {
   return rows[0];
 };
 
+// Obtener sus servicios
+const findServicios = async (nroSolicitud) => {
+  const query = `
+    SELECT *
+    FROM "Servicios"
+    WHERE "codServicio" IN (
+        SELECT "codServicio"
+        FROM "DetallesSolicitudes"
+        WHERE "nroSolicitud" = $1)
+  `;
+
+  const params = [nroSolicitud];
+
+  const { rows } = await db.query(query, params);
+  return rows;
+};
+
+// Obtener sus detalles
+const findDetalles = async (nroSolicitud) => {
+  const query = `
+    SELECT *
+    FROM "Servicios"
+    WHERE "codServicio" IN (
+        SELECT "codServicio"
+        FROM "DetallesSolicitudes"
+        WHERE "nroSolicitud" = $1)
+  `;
+
+  const params = [nroSolicitud];
+
+  const { rows } = await db.query(query, params);
+  return rows;
+};
+
 // Crear nueva
 const create = async (solicitud) => {
   const client = await db.getClient();
 
   try {
     client.query("BEGIN");
+
+    if (solicitud.nombreAutorizado === "") {
+      solicitud.nombreAutorizado = null;
+    }
+
+    if (solicitud.tlfAutorizado === "") {
+      solicitud.tlfAutorizado = null;
+    }
 
     const query1 = `
       INSERT INTO "SolicitudesServicio"
@@ -62,11 +108,12 @@ const create = async (solicitud) => {
           solicitud.reservas.map((r) => {
             const query2 = `
               UPDATE "Reservaciones"
-              SET "status" = 'atendida'
-              WHERE "nroReserva" = $1
+              SET "nroSolicitud" = $1,
+              "status" = 'atendida'
+              WHERE "nroReserva" = $2
            `;
 
-            const params2 = [r.nroReserva];
+            const params2 = [fichaRegistro.nroSolicitud, r.nroReserva];
 
             return client.query(query2, params2);
           })
@@ -153,5 +200,5 @@ const deleteSolicitudServicio = async (nroSolicitud) => {
   await db.query(query, params);
 };
 
-module.exports = { findAll, findById, create, update };
+module.exports = { findAll, findServicios, findDetalles, findById, create, update };
 module.exports.delete = deleteSolicitudServicio;

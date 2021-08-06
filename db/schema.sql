@@ -137,6 +137,7 @@ CREATE TABLE "Reservaciones"(
 	"montoAbonado" "domMontos" NOT NULL,
 	"rifSucursal" "domRIF" NOT NULL,
 	"cedCliente" "domCedulas" NOT NULL,
+	"nroSolicitud" INT,
 	"status" VARCHAR(9) NOT NULL,
 	CONSTRAINT "statusValido"
 	CHECK("status" IN ('pendiente', 'atendida', 'cancelada', 'perdida')),
@@ -429,6 +430,9 @@ REFERENCES "Clientes"("cedCliente")
 ON UPDATE CASCADE ON DELETE CASCADE,
 ADD FOREIGN KEY("codServicio")
 REFERENCES "Servicios"("codServicio")
+ON UPDATE CASCADE ON DELETE CASCADE,
+ADD FOREIGN KEY("nroSolicitud")
+REFERENCES "SolicitudesServicio"("nroSolicitud")
 ON UPDATE CASCADE ON DELETE CASCADE;
 
 --@block

@@ -4,8 +4,8 @@ const SolicitudServicio = require("../models/SolicitudServicio");
 const router = new Router();
 
 // Obtener todas de una sucursal
-router.get("/:rifSucursal", async (req, res) => {
-  const rifSucursal = req.params.rifSucursal;
+router.get("/", async (req, res) => {
+  const rifSucursal = req.query.rifSucursal;
   const solicitudes = await SolicitudServicio.findAll(rifSucursal);
   res.json(solicitudes);
 });
@@ -13,8 +13,23 @@ router.get("/:rifSucursal", async (req, res) => {
 // Obtener una
 router.get("/:nroSolicitud", async (req, res) => {
   const nroSolicitud = req.params.nroSolicitud;
-  const solicitudes = await SolicitudServicio.findById(nroSolicitud);
-  res.json(solicitudes);
+  const solicitud = await SolicitudServicio.findById(nroSolicitud);
+  res.json(solicitud);
+});
+
+// Obtener servicios
+router.get("/:nroSolicitud/servicios", async (req, res) => {
+  const nroSolicitud = req.params.nroSolicitud;
+  const servicios = await SolicitudServicio.findServicios(nroSolicitud);
+  res.json(servicios);
+});
+
+// Obtener detalles
+router.get("/:nroSolicitud/servicios/:codServicio", async (req, res) => {
+  const nroSolicitud = req.params.nroSolicitud;
+  const codServicio = req.params.codServicio;
+  const detalles = await SolicitudServicio.findDetalles(nroSolicitud);
+  res.json(detalles);
 });
 
 // Crear una solicitud
