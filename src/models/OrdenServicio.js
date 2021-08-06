@@ -1,17 +1,19 @@
 const db = require("../db");
 
 
-// Buscar todos los detalles de solicitudes
-const findAll = async () => {
-    const query = `
-      SELECT * 
-      FROM "OrdenesServicio"
-    `;
-  
-    const { rows } = await db.query(query);
-  
-    return rows;
-};
+// Buscar todas las ordenes de una solicitud
+const findAll = async (nroSolicitud) => {
+  const query = `
+    SELECT * 
+    FROM "OrdenesServicio"
+    WHERE "nroSolicitud" = $1
+  `;
+
+  const params = [nroSolicitud];
+
+  const { rows } = await db.query(query, params);
+  return rows;
+}
 
 // Crear orden de servicio
 const create = async (orden) => {
@@ -40,7 +42,7 @@ const create = async (orden) => {
   // Actualizar orden de servicio
   const update = async (nroSolicitud, codServicio, nroActividad, codProducto, fecha, orden) => {
     const query = `
-      UPDATE "OrdenServicio"
+      UPDATE "OrdenesServicio"
       SET "codServicio" = $1,
       "nroActividad" = $2,
       "codProducto" = $3,
@@ -81,12 +83,12 @@ const create = async (orden) => {
   // Eliminar un detalle de solicitud
   const deleteOrdenServicio = async (nroSolicitud, codServicio, nroActividad, codProducto, fecha) => {
     const query = `
-      DELETE FROM "OrdenServicio"
-      WHERE "nroSolicitud" = $1,
-      "codServicio" = $2,
-      "nroActividad" = $3,
-      "codProducto" = $4,
-      "fecha" = $5
+      DELETE FROM "OrdenesServicio"
+      WHERE "nroSolicitud" = $1
+      AND "codServicio" = $2
+      AND "nroActividad" = $3
+      AND "codProducto" = $4
+      AND "fecha" = $5
     `;
   
     const params = [
