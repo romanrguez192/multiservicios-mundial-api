@@ -247,8 +247,12 @@ CREATE TABLE "SolicitudesServicio"(
 	"fechaSalidaReal" TIMESTAMP,
 	"codVehiculo" INT NOT NULL,
 	"rifSucursal" "domRIF" NOT NULL,
-	"autorizado" VARCHAR(60),
-	CONSTRAINT "entradaSalida" CHECK("fechaEntrada" < "fechaSalidaEstimada"),
+	"nombreAutorizado" VARCHAR(60),
+	"tlfAutorizado" "domTelefonos",
+	CONSTRAINT "autorizadoValido"
+	CHECK("nombreAutorizado" IS NOT NULL OR "tlfAutorizado" IS NULL),
+	CONSTRAINT "entradaSalida"
+	CHECK("fechaEntrada" < "fechaSalidaEstimada"),
 	PRIMARY KEY("nroSolicitud")
 );
 
