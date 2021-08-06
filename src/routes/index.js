@@ -23,6 +23,7 @@ const solicitudesServicio = require("./solicitudesServicio");
 const detallesSolicitudes = require("./detallesSolicitudes");
 const ordenServicio = require("./ordenServicio");
 const estadisticas = require("./estadisticas");
+const facturasProveedores = require("./facturasProveedores");
 
 module.exports = (app) => {
   app.use("/api/tiposVehiculos", tiposVehiculos);
@@ -50,4 +51,5 @@ module.exports = (app) => {
   app.use("/api/detallesSolicitudes", detallesSolicitudes);
   app.use("/api/ordenesServicio", ordenServicio);
   app.use("/api/estadisticas/:id", estadisticas);
+  app.use("/api/facturasProveedores", facturasProveedores);
 };

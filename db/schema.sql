@@ -176,7 +176,7 @@ CREATE TABLE "FacturasVentas"(
 --@block
 CREATE TABLE "FacturasProveedores"(
 	"nroFactura" INT GENERATED ALWAYS AS IDENTITY NOT NULL,
-	"fechaPago" TIMESTAMP NOT NULL,
+	"fechaPago" TIMESTAMP,
 	"fechaFacturacion" TIMESTAMP NOT NULL,
 	"codOrdCompra" INT NOT NULL,
 	PRIMARY KEY("nroFactura")
