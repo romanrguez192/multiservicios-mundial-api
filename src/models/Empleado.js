@@ -5,7 +5,7 @@ const login = async (usuario, contrasena) => {
   const query = `
     SELECT "cedEmpleado", e."nombre", "apellido", "telefono", e."direccion", "sueldo", "usuario", "contrasena", "tipoEmpleado", s."rifSucursal", s."nombre" AS "nombreSucursal"
     FROM "Empleados" AS e 
-    JOIN "Sucursales" AS s
+    LEFT JOIN "Sucursales" AS s
     ON e."rifSucursal" = s."rifSucursal"
     WHERE "usuario" = $1
   `;
@@ -120,6 +120,21 @@ const update = async (cedula, empleado) => {
   return rows[0];
 };
 
+const dueno = async (empleado) => {
+  const query = `
+    UPDATE "Empleados"
+    SET "rifSucursal" = $1
+    WHERE "tipoEmpleado" = 'dueño'
+    RETURNING *
+  `;
+
+  const params = [empleado.rifSucursal];
+
+  const { rows } = await db.query(query, params);
+
+  return rows[0];
+};
+
 // Eliminar un empleado TODO: Cambiar esto en caso de
 const deleteEmpleado = async (cedula) => {
   const query = `
@@ -132,5 +147,5 @@ const deleteEmpleado = async (cedula) => {
   await db.query(query, params);
 };
 
-module.exports = { login, findAll, findByServicio, findById, create, update };
+module.exports = { login, findAll, findByServicio, findById, create, update, dueno };
 module.exports.delete = deleteEmpleado;

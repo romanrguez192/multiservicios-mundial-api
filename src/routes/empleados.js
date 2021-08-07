@@ -29,6 +29,12 @@ router.post("/", async (req, res) => {
   res.status(201).json(empleado);
 });
 
+// Sucursal dueño
+router.put("/dueno", async (req, res) => {
+  const empleado = await Empleado.dueno(req.body);
+  res.json(empleado);
+});
+
 // Actualizar
 router.put("/:id", async (req, res) => {
   const cedEmpleado = parseInt(req.params.id);
