@@ -2,6 +2,9 @@ const Router = require("express-promise-router");
 const EstadisticasClientes = require("../models/EstadisticasClientes");
 const EstadisticasMarcas = require("../models/EstadisticasMarcas");
 const EstadisticasPersonal = require("../models/EstadisticasPersonal");
+const EstadisticasProductos = require("../models/EstadisticasProductos");
+const EstadisticasServicios = require("../models/EstadisticasServicios");
+const EstadisticasProveedores = require("../models/EstadisticasProveedores");
 
 const router = new Router();
 
