@@ -15,18 +15,69 @@ const findAll = async (rifSucursal) => {
   return rows;
 };
 
-// Buscar por numero de factura
+// Buscar productos por numero de factura
 const findById = async (nroFactura) => {
-  const query = `
-    SELECT *
-    FROM "FacturasClientes" 
-    WHERE "nroFactura" = $1
-  `;
+  const client = await db.getClient();
+  try{
+    client.query("BEGIN");
 
-  const params = [nroFactura];
+    const query = `
+      SELECT *
+      FROM "DetallesFacturasVentas" 
+      WHERE "nroFacturaVenta" = $1
+    `;
 
-  const { rows } = await db.query(query, params);
-  return rows[0];
+    const params = [nroFactura];
+
+    const { rows: facturas } = await client.query(query, params);
+
+    const promises = [];
+
+    promises.push(
+      Promise.all(
+        facturas.map(f => {
+          const query1 = `
+            SELECT * 
+            FROM "Productos"
+            WHERE "codProducto" = $1
+          `;
+
+          const params1 = [f.codProductoVenta];
+
+          return client.query(query1, params1);
+        })
+      )
+    );
+
+    const productos = await Promise.all(promises);
+
+    const lista = [];
+    productos[0].map(p => {    
+      p.rows.map(row => {
+        const data = {
+          codProducto: row.codProducto,
+          precio: row.precio,
+          nombre: row.nombre,
+        };
+        if(lista.length > 0){
+          lista.map(item => {
+            if(item.codProducto !== row.codProducto){
+              lista.push(data);
+            }
+          })
+        }else lista.push(data);
+      })
+    })
+
+    return lista;
+
+  }catch(err){
+    await client.query("ROLLBACK");
+    throw err;
+  }finally{
+    client.release();
+  }
+  
 };
 
 // Crear nueva factura
