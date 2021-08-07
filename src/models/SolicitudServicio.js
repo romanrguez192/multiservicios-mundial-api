@@ -14,25 +14,23 @@ const findAll = async (rifSucursal) => {
   return rows;
 };
 
-const findHistorial = async (codVehiculo, rifSucursal) => {
-  const query1 = `
-    SELECT sol."fechaEntrada", s.nombre AS servicio
-    FROM "SolicitudesServicio" sol, "Servicios" s
-    WHERE "codVehiculo" = $1
-    AND "rifSucursal" = $2
-    AND s."codServicio" IN (
-        SELECT "codServicio"
-        FROM "DetallesSolicitudes" de
-        WHERE de."nroSolicitud" = sol."nroSolicitud"
-    )
+// Buscar por vehiculo
+const findByVehiculo = async (codVehiculo) => {
+  const query = `
+    SELECT ss.*, ss."fechaSalidaReal" IS NOT NULL AS "finalizada", v."placa" AS "placa", v."marca", v."modelo", c."cedCliente", c."nombre" AS "nombreCliente"
+    FROM "SolicitudesServicio" AS ss
+    JOIN "Vehiculos" AS v
+    ON ss."codVehiculo" = v."codVehiculo"
+    JOIN "Clientes" AS c
+    ON v."cedCliente" = c."cedCliente"
+    WHERE ss."codVehiculo" = $1
   `;
 
-  const params1 = [codVehiculo, rifSucursal];
+  const params = [codVehiculo];
 
-  const { rows } = await db.query(query1, params1);
-
-  return rows;
-}
+  const { rows } = await db.query(query, params);
+  return rows[0];
+};
 
 // Buscar por número
 const findById = async (nroSolicitud) => {
@@ -234,5 +232,6 @@ module.exports = {
   findById,
   create,
   update,
+  findByVehiculo,
 };
 module.exports.delete = deleteSolicitudServicio;
