@@ -11,15 +11,7 @@ router.get("/", async (req, res) => {
   res.json(solicitudes);
 });
 
-<<<<<<< Updated upstream
-// Obtener todos de un vehiculo
-router.get("/historial/:id", async (req, res) => {
-  const codVehiculo = parseInt(req.params.id);
-  const rifSucursal = req.query.rifSucursal;
-  const historial = await SolicitudServicio.findHistorial(codVehiculo, rifSucursal);
-  res.json(historial);
-})
-=======
+
 // Obtener por vehiculo
 router.get("/:codVehiculo", async (req, res) => {
   const codVehiculo = req.params.codVehiculo;
@@ -27,7 +19,6 @@ router.get("/:codVehiculo", async (req, res) => {
   res.json(vehiculo);
 });
 
->>>>>>> Stashed changes
 
 // Obtener una
 router.get("/:nroSolicitud", async (req, res) => {
