@@ -103,7 +103,7 @@ const update = async (codOrdenCompra, orden) => {
 };
 
 // Actualizar el precio
-const update = async (codOrdenCompra, codProducto, precio) => {
+const updateProductos = async (codOrdenCompra, codProducto, precio) => {
   const query = `
     UPDATE "Pide"
     SET "precio" = $1
@@ -131,5 +131,5 @@ const deleteOrden = async (codOrden) => {
   await db.query(query, params);
 };
 
-module.exports = { findAll, create, findProductos, update };
+module.exports = { findAll, create, findProductos, update, updateProductos };
 module.exports.delete = deleteOrden;

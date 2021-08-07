@@ -31,10 +31,10 @@ router.put("/:codOrdCompra", async (req, res) => {
 });
 
 // Actualizar productos
-router.get("/:codOrdCompra/productos/:codProducto", async (req, res) => {
+router.put("/:codOrdCompra/productos/:codProducto", async (req, res) => {
   const codigoOrdCompra = req.params.codOrdCompra;
   const codProducto = req.params.codProducto;
-  const productos = await ordCompra.updatePoductos(codigoOrdCompra, codProducto, req.body.precio);
+  const productos = await ordCompra.updateProductos(codigoOrdCompra, codProducto, req.body.precio);
   res.json(productos);
 });
 

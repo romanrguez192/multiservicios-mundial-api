@@ -143,10 +143,10 @@ const create = async (solicitud) => {
         servicios.map((s) => {
           const query3 = `
             INSERT INTO "DetallesSolicitudes"
-            ("nroSolicitud", "codServicio", "nroActividad", monto)
-            SELECT $1, $2, "nroActividad", "precio"
+            ("nroSolicitud", "codServicio", "nroActividad", "monto")
+            SELECT $1, "codServicio", "nroActividad", "precio"
             FROM "Actividades"
-            WHERE "codServicio" = $3;
+            WHERE "codServicio" = $2;
           `;
 
           const params3 = [fichaRegistro.nroSolicitud, s];
@@ -207,5 +207,12 @@ const deleteSolicitudServicio = async (nroSolicitud) => {
   await db.query(query, params);
 };
 
-module.exports = { findAll, findServicios, findDetalles, findById, create, update };
+module.exports = {
+  findAll,
+  findServicios,
+  findDetalles,
+  findById,
+  create,
+  update,
+};
 module.exports.delete = deleteSolicitudServicio;
