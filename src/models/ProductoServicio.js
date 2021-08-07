@@ -12,6 +12,24 @@ const findAll = async () => {
   return rows;
 };
 
+// Buscar todos los Productos sucursal
+const findAllSucursal = async (rifSucursal) => {
+  const query = `
+    SELECT * 
+    FROM "VistaProductosServicios"
+    WHERE "codProducto" IN (
+      SELECT "codProducto"
+      FROM "Almacena"
+      WHERE "rifSucursal" = $1
+      AND "existenciaTeorica" > 0
+    )
+  `;
+
+  const { rows } = await db.query(query, [rifSucursal]);
+
+  return rows;
+};
+
 // Buscar por codigo
 const findById = async (codProducto) => {
   const query = `
@@ -144,5 +162,5 @@ const deleteProducto = async (codProducto) => {
   }
 };
 
-module.exports = { findAll, findById, create, update };
+module.exports = { findAll, findAllSucursal, findById, create, update };
 module.exports.delete = deleteProducto;

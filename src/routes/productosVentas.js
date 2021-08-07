@@ -5,6 +5,13 @@ const router = new Router();
 
 // Obtener todos
 router.get("/", async (req, res) => {
+  const rifSucursal = req.query.rifSucursal;
+  
+  if (rifSucursal) {
+    const productosVentas = await ProductoVenta.findAllSucursal(rifSucursal);
+    return res.json(productosVentas);
+  }
+
   const productosVentas = await ProductoVenta.findAll();
   res.json(productosVentas);
 });
