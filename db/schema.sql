@@ -169,7 +169,6 @@ CREATE TABLE "FacturasServicios"(
 --@block
 CREATE TABLE "FacturasVentas"(
 	"nroFactura" INT NOT NULL,
-	"nroPago" INT NOT NULL,
 	PRIMARY KEY("nroFactura")
 );
 
@@ -259,7 +258,7 @@ CREATE TABLE "SolicitudesServicio"(
 --@block
 CREATE TABLE "Proveedores"(
 	"rifProveedor" "domRIF" NOT NULL,
-	"razonSocial" VARCHAR(50) NOT NULL,
+	"razonSocial" VARCHAR(50) UNIQUE NOT NULL,
 	"direccion" "domDirecciones" NOT NULL,
 	"personaContacto" VARCHAR(60) NOT NULL,
 	"telefonoCelular" "domTelefonos" NOT NULL,

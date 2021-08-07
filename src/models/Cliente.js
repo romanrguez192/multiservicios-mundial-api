@@ -15,8 +15,13 @@ const findAll = async () => {
 // Buscar por sucursal
 const findBySucursal = async (rifSucursal) => {
   const query = `
-    SELECT *
-    FROM "ClientesSucursales" 
+    SELECT cs.*, EXISTS(
+        SELECT *
+        FROM "ClientesFrecuentes" AS cf
+        WHERE cs."cedCliente" = cf."cedCliente"
+        AND cs."rifSucursal" = cf."rifSucursal"
+    ) AS "esFrecuente"
+    FROM "ClientesSucursales" AS cs
     WHERE "rifSucursal" = $1
   `;
 
