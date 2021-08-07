@@ -14,6 +14,26 @@ const findAll = async (rifSucursal) => {
   return rows;
 };
 
+const findHistorial = async (codVehiculo, rifSucursal) => {
+  const query1 = `
+    SELECT sol."fechaEntrada", s.nombre AS servicio
+    FROM "SolicitudesServicio" sol, "Servicios" s
+    WHERE "codVehiculo" = $1
+    AND "rifSucursal" = $2
+    AND s."codServicio" IN (
+        SELECT "codServicio"
+        FROM "DetallesSolicitudes" de
+        WHERE de."nroSolicitud" = sol."nroSolicitud"
+    )
+  `;
+
+  const params1 = [codVehiculo, rifSucursal];
+
+  const { rows } = await db.query(query1, params1);
+
+  return rows;
+}
+
 // Buscar por número
 const findById = async (nroSolicitud) => {
   const query = `
@@ -146,7 +166,7 @@ const create = async (solicitud) => {
             ("nroSolicitud", "codServicio", "nroActividad", monto)
             SELECT $1, $2, "nroActividad", "precio"
             FROM "Actividades"
-            WHERE "codServicio" = $3;
+            WHERE "codServicio" = $2;
           `;
 
           const params3 = [fichaRegistro.nroSolicitud, s];
@@ -207,5 +227,5 @@ const deleteSolicitudServicio = async (nroSolicitud) => {
   await db.query(query, params);
 };
 
-module.exports = { findAll, findServicios, findDetalles, findById, create, update };
+module.exports = { findAll, findServicios, findDetalles, findById, findHistorial, create, update };
 module.exports.delete = deleteSolicitudServicio;
