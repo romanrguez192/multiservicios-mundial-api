@@ -32,6 +32,7 @@ const findAll = async (rifSucursal) => {
     SELECT "cedEmpleado", "nombre", "apellido", "telefono", "direccion", "sueldo", "tipoEmpleado"
     FROM "Empleados"
     WHERE "rifSucursal" = $1
+    AND "tipoEmpleado" != 'dueño'
   `;
 
   const params = [rifSucursal];
@@ -52,6 +53,7 @@ const findByServicio = async (rifSucursal, codServicio) => {
         FROM "Asignado" AS a
         WHERE "codServicio" = $2
     )
+    AND "tipoEmpleado" != 'dueño'
   `;
 
   const params = [rifSucursal, codServicio];

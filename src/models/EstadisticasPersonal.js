@@ -8,6 +8,7 @@ const personalServicios = async (rifSucursal) => {
     LEFT JOIN "OrdenesServicio" AS os
     ON e."cedEmpleado" = os."cedEmpleado"
     WHERE e."rifSucursal" = $1
+    AND e."tipoEmpleado" != 'dueño'
     GROUP BY e."cedEmpleado", e."nombre"
     ORDER BY "totalServicios" DESC;
   `;
