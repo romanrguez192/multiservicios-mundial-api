@@ -169,14 +169,13 @@ CREATE TABLE "FacturasServicios"(
 --@block
 CREATE TABLE "FacturasVentas"(
 	"nroFactura" INT NOT NULL,
-	"nroPago" INT NOT NULL,
 	PRIMARY KEY("nroFactura")
 );
 
 --@block
 CREATE TABLE "FacturasProveedores"(
 	"nroFactura" INT GENERATED ALWAYS AS IDENTITY NOT NULL,
-	"fechaPago" TIMESTAMP NOT NULL,
+	"fechaPago" TIMESTAMP,
 	"fechaFacturacion" TIMESTAMP NOT NULL,
 	"codOrdCompra" INT NOT NULL,
 	PRIMARY KEY("nroFactura")
@@ -247,15 +246,19 @@ CREATE TABLE "SolicitudesServicio"(
 	"fechaSalidaReal" TIMESTAMP,
 	"codVehiculo" INT NOT NULL,
 	"rifSucursal" "domRIF" NOT NULL,
-	"autorizado" VARCHAR(60),
-	CONSTRAINT "entradaSalida" CHECK("fechaEntrada" < "fechaSalidaEstimada"),
+	"nombreAutorizado" VARCHAR(60),
+	"tlfAutorizado" "domTelefonos",
+	CONSTRAINT "autorizadoValido"
+	CHECK("nombreAutorizado" IS NOT NULL OR "tlfAutorizado" IS NULL),
+	CONSTRAINT "entradaSalida"
+	CHECK("fechaEntrada" < "fechaSalidaEstimada"),
 	PRIMARY KEY("nroSolicitud")
 );
 
 --@block
 CREATE TABLE "Proveedores"(
 	"rifProveedor" "domRIF" NOT NULL,
-	"razonSocial" VARCHAR(50) NOT NULL,
+	"razonSocial" VARCHAR(50) UNIQUE NOT NULL,
 	"direccion" "domDirecciones" NOT NULL,
 	"personaContacto" VARCHAR(60) NOT NULL,
 	"telefonoCelular" "domTelefonos" NOT NULL,

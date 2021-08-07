@@ -25,6 +25,7 @@ const findByCliente = async (rifSucursal, cedCliente, fechaActividad) => {
     WHERE "rifSucursal" = $1
     AND "cedCliente" = $2
     AND "fechaActividad" :: DATE = $3 :: DATE
+    AND "status" = 'pendiente'
   `;
 
   const params = [rifSucursal, cedCliente, fechaActividad];

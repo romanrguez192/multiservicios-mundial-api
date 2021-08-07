@@ -41,6 +41,26 @@ const findAll = async (rifSucursal) => {
   return rows;
 };
 
+// Buscar todos los Empleados por sucursal
+const findByServicio = async (rifSucursal, codServicio) => {
+  const query = `
+    SELECT "cedEmpleado", CONCAT("nombre", ' ', "apellido") AS "nombre"
+    FROM "Empleados"
+    WHERE "rifSucursal" = $1
+    AND "cedEmpleado" IN (
+        SELECT a."cedEmpleado"
+        FROM "Asignado" AS a
+        WHERE "codServicio" = $2
+    )
+  `;
+
+  const params = [rifSucursal, codServicio];
+
+  const { rows } = await db.query(query, params);
+
+  return rows;
+};
+
 // Buscar por cédula
 const findById = async (cedula) => {
   const query = `
@@ -112,5 +132,5 @@ const deleteEmpleado = async (cedula) => {
   await db.query(query, params);
 };
 
-module.exports = { login, findAll, findById, create, update };
+module.exports = { login, findAll, findByServicio, findById, create, update };
 module.exports.delete = deleteEmpleado;
