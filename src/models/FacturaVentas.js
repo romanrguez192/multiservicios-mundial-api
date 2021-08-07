@@ -59,7 +59,13 @@ const findById = async (nroFactura) => {
           precio: row.precio,
           nombre: row.nombre,
         };
-        lista.push(data);
+        if(lista.length > 0){
+          lista.map(item => {
+            if(item.codProducto !== row.codProducto){
+              lista.push(data);
+            }
+          })
+        }else lista.push(data);
       })
     })
 
