@@ -11,6 +11,14 @@ router.get("/", async (req, res) => {
   res.json(solicitudes);
 });
 
+// Obtener todos de un vehiculo
+router.get("/historial/:id", async (req, res) => {
+  const codVehiculo = parseInt(req.params.id);
+  const rifSucursal = req.query.rifSucursal;
+  const historial = await SolicitudServicio.findHistorial(codVehiculo, rifSucursal);
+  res.json(historial);
+})
+
 // Obtener una
 router.get("/:nroSolicitud", async (req, res) => {
   const nroSolicitud = req.params.nroSolicitud;

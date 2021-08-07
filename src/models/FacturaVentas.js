@@ -80,6 +80,84 @@ const findById = async (nroFactura) => {
   
 };
 
+const modaliadPago = (cod) => {
+  switch(cod){
+    case 1: 
+      return 'Efectivo'
+    case 2:
+      return 'Transferencia'
+    case 3:
+      return 'Tarjeta de crédito'
+    case 4:
+      return 'Tarjeta de débito'
+    case 5:
+      return null;
+  }
+}
+
+// Obtener una factura con sus detalles
+const findDetail = async (rifSucursal) => {
+  const query1 = `
+    SELECT * FROM "FacturasClientes"
+    WHERE "rifSucursal" = $1
+  `;
+
+  const params1 = [rifSucursal];
+
+  const { rows: facturas } = await db.query(query1, params1);
+
+  if(!facturas) return null;
+
+  const promises = [];
+
+  promises.push(
+    Promise.all(
+      facturas.map(f => {
+        const query = `
+          SELECT * FROM "Pagos"
+          WHERE "nroPago" = 1
+          AND "nroFactura" = $1
+        `;
+        
+        const params = [f.nroFactura];
+
+        return db.query(query, params);
+      })
+    )
+  );
+
+  const rows = await Promise.all(promises);
+
+  const pagos = [];
+
+  if(rows[0]){
+    rows[0].map(row => {
+      row.rows.map(item => {
+        pagos.push(item);
+      })
+    })
+  }
+
+  const data = []
+  pagos.forEach(p => {
+    facturas.forEach(f => {
+      if(p.nroFactura === f.nroFactura){
+        const x = {
+          nroFactura: p.nroFactura,
+          monto: p.monto,
+          cedCliente: f.cedCliente,
+          fechaFacturacion: f.fechaFacturacion,
+          descuento: f.descuento,
+          formaPago: modaliadPago(p.codModalidad)
+        }
+        data.push(x)
+      }
+    })
+  })
+
+  return data;
+}
+
 // Crear nueva factura
 const create = async (factura) => {
   const client = await db.getClient();
@@ -204,5 +282,5 @@ const deleteFactura = async (nroFactura) => {
   await db.query(query, params);
 };
 
-module.exports = { findAll, findById, create, update };
+module.exports = { findAll, findById, findDetail, create, update };
 module.exports.delete = deleteFactura;
