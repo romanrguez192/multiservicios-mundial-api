@@ -21,8 +21,10 @@ const findAll = async (rifSucursal) => {
 
 const findProductos = async (codOrdenCompra) => {
   const query = `
-    SELECT * 
-    FROM "Pide"
+    SELECT pide.*, p."nombre"
+    FROM "Pide" AS pide
+    JOIN "Productos" AS p
+    ON pide."codProducto" = p."codProducto"
     WHERE "codOrdCompra" = $1
   `;
 
@@ -94,6 +96,23 @@ const update = async (codOrdenCompra, orden) => {
   `;
 
   const params = [orden.fecha, orden.rifProveedor, codOrdenCompra];
+
+  const { rows } = await db.query(query, params);
+
+  return rows[0];
+};
+
+// Actualizar el precio
+const update = async (codOrdenCompra, codProducto, precio) => {
+  const query = `
+    UPDATE "Pide"
+    SET "precio" = $1
+    WHERE "codOrdCompra" = $2
+    AND "codProducto" = $3
+    RETURNING *
+  `;
+
+  const params = [precio, codOrdenCompra, codProducto];
 
   const { rows } = await db.query(query, params);
 

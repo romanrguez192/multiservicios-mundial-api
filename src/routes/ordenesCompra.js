@@ -30,6 +30,14 @@ router.put("/:codOrdCompra", async (req, res) => {
   res.json(ordenCompra);
 });
 
+// Actualizar productos
+router.get("/:codOrdCompra/productos/:codProducto", async (req, res) => {
+  const codigoOrdCompra = req.params.codOrdCompra;
+  const codProducto = req.params.codProducto;
+  const productos = await ordCompra.updatePoductos(codigoOrdCompra, codProducto, req.body.precio);
+  res.json(productos);
+});
+
 // Borrar
 router.delete("/:codOrdCompra", async (req, res) => {
   const codigoOrdCompra = req.params.codOrdCompra;
