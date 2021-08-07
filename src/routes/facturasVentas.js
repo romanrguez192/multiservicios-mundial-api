@@ -16,7 +16,14 @@ router.get("/productos/:id", async(req, res) => {
   const factura = await FacturaVentas.findById(nroFactura);
   res.json(factura);
 })
-// 4050000
+
+// Busca una factura con sus detalles para la tabla factura ventas
+router.get("/factura/:id", async(req, res) => {
+  const rifSucursal = req.params.id;
+  const factura = await FacturaVentas.findDetail(rifSucursal);
+  res.json(factura);
+})
+
 // Crea una factura
 router.post("/", async(req, res) => {
   const factura = await FacturaVentas.create(req.body);
