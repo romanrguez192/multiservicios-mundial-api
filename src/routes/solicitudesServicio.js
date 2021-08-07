@@ -6,19 +6,18 @@ const router = new Router();
 
 // Obtener todas de una sucursal
 router.get("/", async (req, res) => {
+
+  const codVehiculo = req.query.codVehiculo;
+
+  if (codVehiculo) {
+    const vehiculo = await SolicitudServicio.findByVehiculo(codVehiculo);
+    return res.json(vehiculo);
+  }
+
   const rifSucursal = req.query.rifSucursal;
   const solicitudes = await SolicitudServicio.findAll(rifSucursal);
   res.json(solicitudes);
 });
-
-
-// Obtener por vehiculo
-router.get("/:codVehiculo", async (req, res) => {
-  const codVehiculo = req.params.codVehiculo;
-  const vehiculo = await SolicitudServicio.findByVehiculo(codVehiculo);
-  res.json(vehiculo);
-});
-
 
 // Obtener una
 router.get("/:nroSolicitud", async (req, res) => {
