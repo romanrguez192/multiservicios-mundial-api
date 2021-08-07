@@ -106,8 +106,8 @@ const create = async (factura) => {
 
     const query2 = `
       INSERT INTO "FacturasVentas"
-      ("nroFactura", "nroPago")
-      VALUES($1, 1)
+      ("nroFactura")
+      VALUES($1)
       RETURNING *
     `;
 

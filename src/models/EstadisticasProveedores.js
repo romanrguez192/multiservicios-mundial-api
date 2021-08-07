@@ -3,7 +3,7 @@ const db = require("../db");
 
 const proveedorProductos = async (rifSucursal) => {
   const query = `
-    SELECT prov."rifProveedor", prov."razonSocial", COUNT(pide."codProducto") AS "totalProductos", COALESCE(SUM(pide."cantidad"), 0) AS "cantidadTotal"
+    SELECT prov."rifProveedor", prov."razonSocial", COALESCE(SUM(pide."cantidad"), 0) AS "cantidadTotal"
     FROM "Proveedores" AS prov
     LEFT JOIN "OrdenesCompra" AS oc
     ON prov."rifProveedor" = oc."rifProveedor"
@@ -11,7 +11,8 @@ const proveedorProductos = async (rifSucursal) => {
     LEFT JOIN "Pide" AS pide
     ON oc."codOrdCompra" = pide."codOrdCompra"
     AND pide."precio" IS NOT NULL
-    GROUP BY prov."rifProveedor", prov."razonSocial";
+    GROUP BY prov."rifProveedor", prov."razonSocial"
+    ORDER BY "cantidadTotal" DESC;
   `;
 
   const params = [rifSucursal];

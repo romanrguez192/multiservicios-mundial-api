@@ -354,7 +354,8 @@ CREATE TABLE "DetallesSolicitudes"(
 CREATE TABLE "DetallesFacturasVentas"(
 	"nroFacturaVenta" INT NOT NULL,
 	"codProductoVenta" INT NOT NULL,
-	"monto" "domMontos" NOT NULL,
+	"precio" "domMontos" NOT NULL,
+	"cantidad" "domCantidades" NOT NULL,
 	PRIMARY KEY("nroFacturaVenta", "codProductoVenta")
 );
 

@@ -8,7 +8,8 @@ const personalServicios = async (rifSucursal) => {
     LEFT JOIN "OrdenesServicio" AS os
     ON e."cedEmpleado" = os."cedEmpleado"
     WHERE e."rifSucursal" = $1
-    GROUP BY e."cedEmpleado", e."nombre";
+    GROUP BY e."cedEmpleado", e."nombre"
+    ORDER BY "totalServicios" DESC;
   `;
 
   const params = [rifSucursal];

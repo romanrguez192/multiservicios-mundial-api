@@ -8,7 +8,8 @@ const serviciosSolicitados = async (rifSucursal) => {
     LEFT JOIN "DetallesSolicitudes" AS ds
     ON s."codServicio" = ds."codServicio"
     WHERE s."rifSucursal" = $1
-    GROUP BY s."codServicio", s."nombreServicio";
+    GROUP BY s."codServicio", s."nombreServicio"
+    ORDER BY "totalVeces" DESC;
   `;
 
   const params = [rifSucursal];

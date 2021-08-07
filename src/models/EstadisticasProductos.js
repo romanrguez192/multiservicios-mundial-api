@@ -12,7 +12,8 @@ const productosVendidos = async (rifSucursal) => {
     LEFT JOIN "FacturasClientes" AS fc
     ON fv."nroFactura" = fc."nroFactura"
     AND fc."rifSucursal" = $1
-    GROUP BY p."codProducto", p."nombre";
+    GROUP BY p."codProducto", p."nombre"
+    ORDER BY "totalVentas" DESC;
   `;
 
   const params = [rifSucursal];
