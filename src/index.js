@@ -1,12 +1,14 @@
-require("dotenv").config();
+if (process.env.NODE_ENV != "production") {
+  require("dotenv").config();
+}
 
 const app = require("./app");
 const db = require("./db");
 
 const main = async () => {
-  app.listen(app.get("port"), () =>
-    console.log(`Server listening on port ${app.get("port")}`)
-  );
+  app.listen(app.get("port"), () => {
+    console.log(`Server listening on port ${app.get("port")}`);
+  });
 
   try {
     const client = await db.getClient();
